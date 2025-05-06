@@ -29,6 +29,7 @@ import com.example.sistema_de_gestion_de_investigadores.Data_Base.ProyectosRepos
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Usuario
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.UsuariosRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 //ViewModel de los usuarios
 class userViewModel(private val userRepository: UsuariosRepository) : ViewModel() {
 
-    fun login(username: String, password: String): Flow<Usuario?> {
+    fun login(username: String, password: String): Flow<Boolean?> {
         return userRepository.login(username, password)
     }
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 Repositorio de usuarios que proporciona ,login, agregar, actualizar y eliminar usuarios
  */
 interface UsuariosRepository{
-    fun login(username: String, password: String): Flow<Usuario?>
+    fun login(username: String, password: String): Flow<Boolean?>
     suspend fun addUsuario(usuario: Usuario)
     suspend fun updateUsuario(usuario: Usuario)
     suspend fun deleteUsuario(usuario: Usuario)
@@ -160,9 +160,9 @@ llamado de los repositorios
 
 class UsuarioRepositoryImple(private val userDao: UsuariosDao) : UsuariosRepository {
 
-    override fun login(username: String, password: String): Flow<Usuario?> = flow {
+    override fun login(username: String, password: String): Flow<Boolean> = flow {
         val usuario = userDao.login(username, password)
-        emit(usuario)
+        emit(usuario != null)
     }
 
     override suspend fun addUsuario(usuario: Usuario) {
