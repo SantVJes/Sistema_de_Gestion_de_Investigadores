@@ -161,7 +161,8 @@ llamado de los repositorios
 class UsuarioRepositoryImple(private val userDao: UsuariosDao) : UsuariosRepository {
 
     override fun login(username: String, password: String): Flow<Usuario?> = flow {
-        emit( userDao.login(username, password))
+        val usuario = userDao.login(username, password)
+        emit(usuario)
     }
 
     override suspend fun addUsuario(usuario: Usuario) {

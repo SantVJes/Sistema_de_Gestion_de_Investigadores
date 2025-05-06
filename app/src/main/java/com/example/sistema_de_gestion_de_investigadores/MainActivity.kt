@@ -17,6 +17,7 @@ import com.example.sistema_de_gestion_de_investigadores.Data_Base.Usuario
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.Sistema_de_Gestion_de_InvestigadoresTheme
 import androidx.lifecycle.viewModelScope
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.UsuariosRepository
+import com.example.sistema_de_gestion_de_investigadores.Navigation.AppNavigations
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.userViewModel
 
 class MainActivity : ComponentActivity() {
@@ -25,49 +26,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Sistema_de_Gestion_de_InvestigadoresTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                    App_Container(context = this)
-
-                    //incertar
-                    val appContainer = App_Container(context = this)
-                    val usuarioRepository = appContainer.provideUsuarioRepository()
-
-                    val newuser = Usuario(
-                        username = "test",
-                        password = "test"
-                    )
-                    // Insert a new user (Corrected)
-
-                    val viewModel = userViewModel(userRepository = usuarioRepository)
-
-                    viewModel.incertUser( newuser)
+                AppNavigations(appContainer = App_Container(this))
 
 
-
-
-
-                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Sistema_de_Gestion_de_InvestigadoresTheme {
-        Greeting("Android")
     }
 }
