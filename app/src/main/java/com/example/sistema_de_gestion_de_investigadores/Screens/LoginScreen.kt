@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
+import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.userViewModel
 import kotlinx.coroutines.launch
 
@@ -108,6 +109,8 @@ fun Body_login(navController: NavController, appContainer: App_Container) {
                     userViewModel.login(email, password).collect { permitido ->
                         if (permitido == true) {
                             Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show()
+                            navController.navigate(Directorio.HomeScreen)
+
                         } else {
                             Toast.makeText(context, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
                         }
