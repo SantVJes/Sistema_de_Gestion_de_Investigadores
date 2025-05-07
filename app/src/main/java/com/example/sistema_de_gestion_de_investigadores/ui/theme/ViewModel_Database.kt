@@ -62,9 +62,10 @@ class userViewModel(private val userRepository: UsuariosRepository) : ViewModel(
 
 //ViewModel de los investigadores
 class investigadorViewModel(private val investigadorRepository: InvestigadoresRepository) : ViewModel() {
-    fun getAllInvestigadores(): Flow<List<Investigador>> {
-        return investigadorRepository.getAllInvestigadores()
-    }
+
+    val investigadores : Flow<List<Investigador>> = investigadorRepository.getAllInvestigadores()
+
+
     fun getInvestigadorById(id: Int): Flow<Investigador?> {
         return investigadorRepository.getInvestigadorById(id)
     }

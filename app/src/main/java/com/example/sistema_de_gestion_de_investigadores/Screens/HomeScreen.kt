@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
+import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import java.nio.file.WatchEvent
 
 @Composable
@@ -107,7 +108,7 @@ fun Home_screen(navController: NavController, appContainer: App_Container) {
 @Composable
 fun Body_home(navController: NavController, appContainer: App_Container) {
     val opciones = listOf(
-        Triple("Investigadores", "investigadores", Icons.Default.Person),
+        Triple("Investigadores", Directorio.InvestigadoresScreen, Icons.Default.Person),
         Triple("Proyectos", "proyectos", Icons.Default.DateRange),
         Triple("Herramientas", "herramientas", Icons.Default.Build),
         Triple("Líneas de trabajo", "lineas_trabajo", Icons.Default.Info),
