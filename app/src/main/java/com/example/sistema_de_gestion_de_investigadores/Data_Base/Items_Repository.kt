@@ -135,7 +135,7 @@ por articulo, agregar y eliminar investigadores por articulo
  */
 interface ArticuloInvestigadorRepository {
     fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>>
-    fun getArticuloPorInvestigador(investigadorId: Int): Flow<ArticuloInvestigador?>
+    fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador>>
     suspend fun addRelacion(relacion: ArticuloInvestigador)
     suspend fun deleteRelacion(relacion: ArticuloInvestigador)
 }
@@ -179,9 +179,9 @@ class UsuarioRepositoryImple(private val userDao: UsuariosDao) : UsuariosReposit
 
 class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao) : InvestigadoresRepository {
 
-    override fun getAllInvestigadores(): Flow<List<Investigador>> = flow {
-        emit(investigadorDao.getAllInvestigadores())
-    }
+    override fun getAllInvestigadores(): Flow<List<Investigador>> =
+        investigadorDao.getAllInvestigadores()
+
     override fun getInvestigadorById(id: Int): Flow<Investigador?> = flow {
         emit(investigadorDao.getInvestigadorById(id))
     }
@@ -360,7 +360,7 @@ class ArticuloInvestigadorRepositoryImple(private val articuloInvestigadorDao: A
     override fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> = flow {
         emit(articuloInvestigadorDao.getInvestigadoresPorArticulo(articuloId))
     }
-    override  fun getArticuloPorInvestigador(investigadorId: Int): Flow<ArticuloInvestigador?> = flow {
+    override  fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador>> = flow {
         emit(articuloInvestigadorDao.getArticuloPorInvestigador(investigadorId))
     }
     override suspend fun addRelacion(relacion: ArticuloInvestigador) {

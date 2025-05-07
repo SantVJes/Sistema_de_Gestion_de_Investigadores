@@ -82,6 +82,7 @@ class investigadorViewModel(private val investigadorRepository: InvestigadoresRe
     fun deleteInvestigador(investigador: Investigador) {
         viewModelScope.launch {
             investigadorRepository.deleteInvestigador(investigador)
+
         }
     }
 
@@ -306,7 +307,7 @@ class ArticuloInvestigadorViewModel(private val articuloInvestigadorRepository: 
     fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> {
         return articuloInvestigadorRepository.getInvestigadoresPorArticulo(articuloId)
     }
-    fun getArticuloPorInvestigador(investigadorId: Int): Flow<ArticuloInvestigador?> {
+    fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador?>> {
         return articuloInvestigadorRepository.getArticuloPorInvestigador(investigadorId)
     }
     fun incertRelacion(relacion: ArticuloInvestigador) {

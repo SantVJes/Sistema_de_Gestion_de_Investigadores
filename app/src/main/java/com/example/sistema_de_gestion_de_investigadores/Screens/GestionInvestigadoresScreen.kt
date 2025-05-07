@@ -62,7 +62,15 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Investigador
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.AreaTrabajoViewModel
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.ArticuloInvestigadorViewModel
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.ArticuloViewModel
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.InvestigadorLineaTrabajoViewModel
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.LineaTrabajoViewModel
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.ProyectoInvestigadorViewModel
+import com.example.sistema_de_gestion_de_investigadores.ui.theme.ProyectosViewModel
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.investigadorViewModel
+import java.lang.invoke.MethodHandles.empty
 
 @Composable
 fun Investigadores_Screen(navController: NavController, appContainer: App_Container) {
@@ -124,6 +132,15 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
 
     // Estado para controlar la edición de un investigador
     var investigadorEditado by remember { mutableStateOf<Investigador?>(null) }
+    val areaTrabajoViewModel = AreaTrabajoViewModel(appContainer.provideAreaTrabajoRepository())
+    val allAreasTrabajo by areaTrabajoViewModel.getAllAreasTrabajo().collectAsState(emptyList())
+    val proyectoViewModel = ProyectosViewModel(appContainer.provideProyectoRepository())
+    val articulosViewModel = ArticuloViewModel(appContainer.provideArticuloRepository())
+    val tablaintermediade_ArticuloInvestigador = ArticuloInvestigadorViewModel(appContainer.provideArticuloInvestigadorRepository())
+    val tablaintermediade_ProyectoInvestigador = ProyectoInvestigadorViewModel(appContainer.provideProyectoInvestigadorRepository())
+    val lineaTrabajoViewModel = LineaTrabajoViewModel(appContainer.provideLineaTrabajoRepository())
+    val tablaintermediade_InvestigadorLineaTrabajo = InvestigadorLineaTrabajoViewModel(appContainer.provideInvestigadorLineaTrabajoRepository())
+
 
     // Variables para el formulario de agregar/editar investigador
     var nombre by remember { mutableStateOf("") }
@@ -275,8 +292,51 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
                             } else {
                                 Text("Nivel SNII: No Tiene")
                             }
+                            val area by areaTrabajoViewModel.getAreaTrabajoById(investigador.areaId).collectAsState(null)
 
-                            Text("Área: ${investigador.areaId}")
+                            Text("Área: ${area?.nombre}")
+
+                            val lineas by tablaintermediade_InvestigadorLineaTrabajo.getLineasPorInvestigador(investigador.id).collectAsState(emptyList())
+                            val nombresLineas = mutableListOf<String>()
+
+                            for (linea in lineas) {
+                                val obtenerNombre = lineaTrabajoViewModel.getLineaTrabajoById(linea.lineaTrabajoId).collectAsState(null)
+                                nombresLineas.add(obtenerNombre.value?.nombre ?: "")
+
+                            }
+
+                            Text("Líneas de Trabajo: ${nombresLineas.joinToString(", ", prefix = "(", postfix = ")")}")
+                            val proyectos by tablaintermediade_ProyectoInvestigador.getProyectoPorInvestigador(investigador.id).collectAsState(emptyList())
+                            val nombresCompletos = proyectos.mapNotNull { proyecto ->
+                                val nombreState = proyectoViewModel.getProyectoById(proyecto!!.proyectoId.toInt()).collectAsState(initial = null)
+                                val nombre = nombreState.value?.nombre
+
+                                nombre?.let {
+                                    if (proyecto!!.esPrincipal)
+                                        "$it es Principal "
+                                    else
+                                        it
+                                }
+                            }
+
+
+                            Text("Proyectos: ${nombresCompletos.joinToString(", ", prefix = " ", postfix = "")}")
+
+                            val articulos by tablaintermediade_ArticuloInvestigador.getArticuloPorInvestigador(investigador.id).collectAsState(emptyList())
+
+                            val nombresArticulos = articulos.mapNotNull { articulo ->
+                                val nombreState = articulosViewModel.getArticuloById(articulo!!.articuloId.toInt()).collectAsState(initial = null)
+                                nombreState.value?.nombre
+                                val nombre = nombreState.value?.nombre
+
+                                nombre?.let {
+                                    if (articulo!!.esPrincipal)
+                                        "$it es Principal author  "
+                                    else
+                                        it
+                                }
+                            }
+                            Text("Artículos: ${nombresArticulos.joinToString(", ", prefix = " ", postfix = "")}")
 
                             // Botón de eliminar
                             Row(
@@ -288,6 +348,9 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
                                 IconButton(
                                     onClick = {
                                         investigadoresViewModel.deleteInvestigador(investigador)
+
+
+
                                     }
                                 ) {
                                     Icon(Icons.Default.Delete, contentDescription = "Eliminar Investigador", tint = Color.Red)
