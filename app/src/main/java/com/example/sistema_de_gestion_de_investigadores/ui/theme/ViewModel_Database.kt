@@ -29,6 +29,7 @@ import com.example.sistema_de_gestion_de_investigadores.Data_Base.ProyectosRepos
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Usuario
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.UsuariosRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 //ViewModel de los usuarios
 class userViewModel(private val userRepository: UsuariosRepository) : ViewModel() {
 
-    fun login(username: String, password: String): Flow<Usuario?> {
+    fun login(username: String, password: String): Flow<Boolean?> {
         return userRepository.login(username, password)
     }
 
@@ -61,9 +62,10 @@ class userViewModel(private val userRepository: UsuariosRepository) : ViewModel(
 
 //ViewModel de los investigadores
 class investigadorViewModel(private val investigadorRepository: InvestigadoresRepository) : ViewModel() {
-    fun getAllInvestigadores(): Flow<List<Investigador>> {
-        return investigadorRepository.getAllInvestigadores()
-    }
+
+    val investigadores : Flow<List<Investigador>> = investigadorRepository.getAllInvestigadores()
+
+
     fun getInvestigadorById(id: Int): Flow<Investigador?> {
         return investigadorRepository.getInvestigadorById(id)
     }
@@ -77,11 +79,14 @@ class investigadorViewModel(private val investigadorRepository: InvestigadoresRe
             investigadorRepository.updateInvestigador(investigador)
         }
     }
+
     fun deleteInvestigador(investigador: Investigador) {
         viewModelScope.launch {
             investigadorRepository.deleteInvestigador(investigador)
+
         }
     }
+
 
 }
 
@@ -304,7 +309,7 @@ class ArticuloInvestigadorViewModel(private val articuloInvestigadorRepository: 
     fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> {
         return articuloInvestigadorRepository.getInvestigadoresPorArticulo(articuloId)
     }
-    fun getArticuloPorInvestigador(investigadorId: Int): Flow<ArticuloInvestigador?> {
+    fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador?>> {
         return articuloInvestigadorRepository.getArticuloPorInvestigador(investigadorId)
     }
     fun incertRelacion(relacion: ArticuloInvestigador) {

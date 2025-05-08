@@ -32,7 +32,7 @@ investigadorDao proporciona acceso a la tabla de investigadores en la base de da
 @Dao
 interface InvestigadoresDao {
     @Query("SELECT * FROM Investigador")
-    suspend fun getAllInvestigadores(): List<Investigador>
+    fun getAllInvestigadores(): Flow<List<Investigador>>
 
     @Query("SELECT * FROM Investigador WHERE id = :id")
     suspend fun getInvestigadorById(id: Int): Investigador?
@@ -212,7 +212,7 @@ interface  ArticuloInvestigadorDao{
     suspend fun getInvestigadoresPorArticulo(articuloId: Int): List<ArticuloInvestigador>
 
     @Query("SELECT * FROM ArticuloInvestigador WHERE investigadorId = :investigadorId")
-    suspend fun getArticuloPorInvestigador(investigadorId: Int): ArticuloInvestigador?
+    suspend fun getArticuloPorInvestigador(investigadorId: Int): List<ArticuloInvestigador>
 
     @Insert
     suspend fun addRelacion(relacion: ArticuloInvestigador)

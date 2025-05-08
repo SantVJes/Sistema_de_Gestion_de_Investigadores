@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 Repositorio de usuarios que proporciona ,login, agregar, actualizar y eliminar usuarios
  */
 interface UsuariosRepository{
-    fun login(username: String, password: String): Flow<Usuario?>
+    fun login(username: String, password: String): Flow<Boolean?>
     suspend fun addUsuario(usuario: Usuario)
     suspend fun updateUsuario(usuario: Usuario)
     suspend fun deleteUsuario(usuario: Usuario)
@@ -135,7 +135,7 @@ por articulo, agregar y eliminar investigadores por articulo
  */
 interface ArticuloInvestigadorRepository {
     fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>>
-    fun getArticuloPorInvestigador(investigadorId: Int): Flow<ArticuloInvestigador?>
+    fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador>>
     suspend fun addRelacion(relacion: ArticuloInvestigador)
     suspend fun deleteRelacion(relacion: ArticuloInvestigador)
 }
@@ -160,9 +160,9 @@ llamado de los repositorios
 
 class UsuarioRepositoryImple(private val userDao: UsuariosDao) : UsuariosRepository {
 
-    override fun login(username: String, password: String): Flow<Usuario?> = flow {
+    override fun login(username: String, password: String): Flow<Boolean> = flow {
         val usuario = userDao.login(username, password)
-        emit(usuario)
+        emit(usuario != null)
     }
 
     override suspend fun addUsuario(usuario: Usuario) {
@@ -179,9 +179,9 @@ class UsuarioRepositoryImple(private val userDao: UsuariosDao) : UsuariosReposit
 
 class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao) : InvestigadoresRepository {
 
-    override fun getAllInvestigadores(): Flow<List<Investigador>> = flow {
-        emit(investigadorDao.getAllInvestigadores())
-    }
+    override fun getAllInvestigadores(): Flow<List<Investigador>> =
+        investigadorDao.getAllInvestigadores()
+
     override fun getInvestigadorById(id: Int): Flow<Investigador?> = flow {
         emit(investigadorDao.getInvestigadorById(id))
     }
@@ -360,7 +360,7 @@ class ArticuloInvestigadorRepositoryImple(private val articuloInvestigadorDao: A
     override fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> = flow {
         emit(articuloInvestigadorDao.getInvestigadoresPorArticulo(articuloId))
     }
-    override  fun getArticuloPorInvestigador(investigadorId: Int): Flow<ArticuloInvestigador?> = flow {
+    override  fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador>> = flow {
         emit(articuloInvestigadorDao.getArticuloPorInvestigador(investigadorId))
     }
     override suspend fun addRelacion(relacion: ArticuloInvestigador) {
