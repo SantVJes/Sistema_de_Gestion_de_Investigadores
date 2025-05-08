@@ -79,12 +79,14 @@ class investigadorViewModel(private val investigadorRepository: InvestigadoresRe
             investigadorRepository.updateInvestigador(investigador)
         }
     }
+
     fun deleteInvestigador(investigador: Investigador) {
         viewModelScope.launch {
             investigadorRepository.deleteInvestigador(investigador)
 
         }
     }
+
 
 }
 

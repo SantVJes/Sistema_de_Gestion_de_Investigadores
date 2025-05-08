@@ -2,6 +2,7 @@
 
 package com.example.sistema_de_gestion_de_investigadores.Screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -32,10 +34,15 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -149,7 +156,9 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
     var areaId by remember { mutableStateOf("") }
     var nivelSNII by remember { mutableStateOf<String?>(null) }
     var fechaSNII by remember { mutableStateOf("") }
-    var mostrarFormulario by remember { mutableStateOf(false) }
+    var mostrarFormulario by remember { mutableStateOf(true) }
+
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -181,24 +190,96 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
                         label = { Text("Carrera") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    TextField(
-                        value = areaId,
-                        onValueChange = { areaId = it },
-                        label = { Text("Área") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    TextField(
-                        value = nivelSNII ?: "",
-                        onValueChange = { nivelSNII = if (it.isNotEmpty()) it else null },
-                        label = { Text("Nivel SNII") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    TextField(
-                        value = fechaSNII,
-                        onValueChange = { fechaSNII = it },
-                        label = { Text("Fecha SNII") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+
+
+
+                    var expanded1 by remember { mutableStateOf(false) }
+                    var areaSeleccionadaNombre by remember { mutableStateOf<String?>(null) }
+
+                    ExposedDropdownMenuBox(
+                        expanded = expanded1,
+                        onExpandedChange = { expanded1 = !expanded1 } // alterna al hacer clic
+                    ) {
+                        OutlinedTextField(
+                            value = areaSeleccionadaNombre ?: "Selecciona un área",
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Área de trabajo") },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded1)
+                            },
+                            modifier = Modifier
+                                .menuAnchor() // importante para alinear bien el menú
+                                .fillMaxWidth()
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded1,
+                            onDismissRequest = { expanded1 = false }
+                        ) {
+                            allAreasTrabajo.forEach { area ->
+                                DropdownMenuItem(
+                                    text = { Text(area.nombre) },
+                                    onClick = {
+                                        areaId = area.id.toString()
+                                        areaSeleccionadaNombre = area.nombre
+                                        expanded1 = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+
+
+
+                    // Selector para Nivel SNII
+                    var expanded by remember { mutableStateOf(false) }
+                    val opcionesSNII = listOf("No tiene", "Nivel 1", "Nivel 2", "Nivel 3")
+
+                    Box(  modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { expanded = true }
+                    ) {
+                        OutlinedTextField(
+                            value = nivelSNII ?: "No tiene",
+                            onValueChange = {},
+                            label = { Text("Nivel SNII") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { expanded = true },
+                            readOnly = true,
+                            trailingIcon = {
+                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                            }
+                        )
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            opcionesSNII.forEach { opcion ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        nivelSNII = if (opcion == "No tiene") null else opcion
+                                        expanded = false
+                                    },
+                                    text = { Text(opcion) }
+                                )
+                            }
+                        }
+                    }
+
+                    // Fecha SNII solo si tiene nivel
+                    if (nivelSNII != null) {
+                        TextField(
+                            value = fechaSNII,
+                            onValueChange = { fechaSNII = it },
+                            label = { Text("Fecha SNII") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
@@ -269,115 +350,230 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
             Spacer(modifier = Modifier.height(16.dp))
 
             // Usamos la lista recolectada por collectAsState
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                items(allInvestigadores) { investigador ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA)),
-                        elevation = CardDefaults.cardElevation(4.dp)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
+
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            items(allInvestigadores) { investigador ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA)),
+                    elevation = CardDefaults.cardElevation(6.dp)
+                ) {
+                    val articulos by tablaintermediade_ArticuloInvestigador.getArticuloPorInvestigador(
+                        investigador.id
+                    ).collectAsState(emptyList())
+
+                    val nombresArticulos = articulos.mapNotNull { articulo ->
+                        val nombreState =
+                            articulosViewModel.getArticuloById(articulo!!.articuloId.toInt())
+                                .collectAsState(initial = null)
+                        val principalin = nombreState.value?.nombre
+                        principalin?.let {
+                            if (articulo.esPrincipal)
+                                "$it es Principal    "
+                            else
+                                it
+                        }
+
+
+                    }
+
+                    val area by areaTrabajoViewModel.getAreaTrabajoById(investigador.areaId)
+                        .collectAsState(null)
+
+                    val lineas by tablaintermediade_InvestigadorLineaTrabajo.getLineasPorInvestigador(
+                        investigador.id
+                    ).collectAsState(emptyList())
+                    val nombresLineas = lineas.map { linea ->
+                        lineaTrabajoViewModel.getLineaTrabajoById(linea.lineaTrabajoId)
+                            .collectAsState(null).value?.nombre ?: ""
+
+
+                    }
+
+                    val proyectos by tablaintermediade_ProyectoInvestigador.getProyectoPorInvestigador(
+                        investigador.id
+                    ).collectAsState(emptyList())
+
+                    val nombresCompletos = proyectos.mapNotNull { proyecto ->
+
+                        val nombreState = proyectoViewModel.getProyectoById(proyecto!!.proyectoId.toInt())
+                            .collectAsState(initial = null)
+
+                        val nombre = nombreState.value?.nombre
+                        nombre?.let {
+                            if (proyecto.esPrincipal)
+                                "$it es Principal    "
+                            else
+                                it
+                        }
+
+                    }
+
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = investigador.nombre,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1976D2)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            "Especialidad: ${investigador.especialidad}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            "Carrera: ${investigador.carrera}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+
+                        if (investigador.nivelSNII != null) {
                             Text(
-                                text = investigador.nombre,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
+                                "Nivel SNII: ${investigador.nivelSNII}",
+                                style = MaterialTheme.typography.bodyMedium
                             )
-                            Text("Especialidad: ${investigador.especialidad}")
-                            Text("Carrera: ${investigador.carrera}")
-                            if (investigador.nivelSNII != null) {
-                                Text("Nivel SNII: ${investigador.nivelSNII}")
-                                Text("Fecha SNII: ${investigador.fechaSNII}")
-                            } else {
-                                Text("Nivel SNII: No Tiene")
+                            Text(
+                                "Fecha SNII: ${investigador.fechaSNII}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        } else {
+                            Text(
+                                "Nivel SNII: No Tiene",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                        }
+
+                        Text("Área: ${area?.nombre}", style = MaterialTheme.typography.bodyMedium)
+
+                        // Mini tarjeta para Líneas de Trabajo
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F6E5)),
+                            elevation = CardDefaults.cardElevation(4.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(
+                                    text = "Líneas de Trabajo",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = nombresLineas.joinToString(
+                                        ", ",
+                                        prefix = "(",
+                                        postfix = ")"
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color(0xFF388E3C)
+                                )
                             }
-                            val area by areaTrabajoViewModel.getAreaTrabajoById(investigador.areaId).collectAsState(null)
+                        }
 
-                            Text("Área: ${area?.nombre}")
-
-                            val lineas by tablaintermediade_InvestigadorLineaTrabajo.getLineasPorInvestigador(investigador.id).collectAsState(emptyList())
-                            val nombresLineas = mutableListOf<String>()
-
-                            for (linea in lineas) {
-                                val obtenerNombre = lineaTrabajoViewModel.getLineaTrabajoById(linea.lineaTrabajoId).collectAsState(null)
-                                nombresLineas.add(obtenerNombre.value?.nombre ?: "")
-
+                        // Mini tarjeta para Proyectos
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFE6DEF3)),
+                            elevation = CardDefaults.cardElevation(4.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(
+                                    text = "Proyectos",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = nombresCompletos.joinToString(", "),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color(0xFF880606)
+                                )
                             }
+                        }
 
-                            Text("Líneas de Trabajo: ${nombresLineas.joinToString(", ", prefix = "(", postfix = ")")}")
-                            val proyectos by tablaintermediade_ProyectoInvestigador.getProyectoPorInvestigador(investigador.id).collectAsState(emptyList())
-                            val nombresCompletos = proyectos.mapNotNull { proyecto ->
-                                val nombreState = proyectoViewModel.getProyectoById(proyecto!!.proyectoId.toInt()).collectAsState(initial = null)
-                                val nombre = nombreState.value?.nombre
+                        // Mini tarjeta para Artículos
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFE3F2FD)),
+                            elevation = CardDefaults.cardElevation(4.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(
+                                    text = "Artículos",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = nombresArticulos.joinToString(", "),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color(0xFF1976D2)
+                                )
+                            }
+                        }
 
-                                nombre?.let {
-                                    if (proyecto!!.esPrincipal)
-                                        "$it es Principal "
-                                    else
-                                        it
+                        // Botones de eliminar y editar
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    investigadoresViewModel.deleteInvestigador(investigador)
                                 }
-                            }
-
-
-                            Text("Proyectos: ${nombresCompletos.joinToString(", ", prefix = " ", postfix = "")}")
-
-                            val articulos by tablaintermediade_ArticuloInvestigador.getArticuloPorInvestigador(investigador.id).collectAsState(emptyList())
-
-                            val nombresArticulos = articulos.mapNotNull { articulo ->
-                                val nombreState = articulosViewModel.getArticuloById(articulo!!.articuloId.toInt()).collectAsState(initial = null)
-                                nombreState.value?.nombre
-                                val nombre = nombreState.value?.nombre
-
-                                nombre?.let {
-                                    if (articulo!!.esPrincipal)
-                                        "$it es Principal author  "
-                                    else
-                                        it
-                                }
-                            }
-                            Text("Artículos: ${nombresArticulos.joinToString(", ", prefix = " ", postfix = "")}")
-
-                            // Botón de eliminar
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 8.dp),
-                                horizontalArrangement = Arrangement.End
                             ) {
-                                IconButton(
-                                    onClick = {
-                                        investigadoresViewModel.deleteInvestigador(investigador)
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Eliminar Investigador",
+                                    tint = Color.Red
+                                )
+                            }
 
+                            Spacer(modifier = Modifier.width(8.dp))
 
-
-                                    }
-                                ) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Eliminar Investigador", tint = Color.Red)
+                            IconButton(
+                                onClick = {
+                                    mostrarFormulario = true
+                                    // Cargar los datos del investigador
+                                    mostrarFormulario = true
+                                    // Cargar los datos del investigador en el formulario
+                                    investigadorEditado = investigador
+                                    nombre = investigador.nombre
+                                    especialidad = investigador.especialidad
+                                    carrera = investigador.carrera
+                                    areaId = investigador.areaId.toString()
+                                    nivelSNII = investigador.nivelSNII
+                                    fechaSNII = investigador.fechaSNII ?: ""
                                 }
-
-                                // Botón de editar
-                                IconButton(
-                                    onClick = {
-                                        mostrarFormulario = true
-                                        // Cargar los datos del investigador en el formulario
-                                        investigadorEditado = investigador
-                                        nombre = investigador.nombre
-                                        especialidad = investigador.especialidad
-                                        carrera = investigador.carrera
-                                        areaId = investigador.areaId.toString()
-                                        nivelSNII = investigador.nivelSNII
-                                        fechaSNII = investigador.fechaSNII ?: ""
-                                    }
-                                ) {
-                                    Icon(Icons.Default.Edit, contentDescription = "Editar Investigador", tint = Color.Blue)
-                                }
+                            ) {
+                                Icon(
+                                    Icons.Default.Edit,
+                                    contentDescription = "Editar Investigador",
+                                    tint = Color.Blue
+                                )
                             }
                         }
                     }
                 }
             }
+            }
         }
+
         // Botón para añadir un investigador
         FloatingActionButton(
             onClick = {
