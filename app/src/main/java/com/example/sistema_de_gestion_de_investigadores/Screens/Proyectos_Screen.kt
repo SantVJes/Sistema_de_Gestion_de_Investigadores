@@ -176,7 +176,9 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
 
     //Variables a utilizar en el formulario y en la app en general
     var ver_form by remember { mutableStateOf(false) }
-    var id_unico by remember { mutableStateOf("0") }
+    var id_unico by remember { mutableStateOf("") }
+    var id_unicoEd by remember { mutableStateOf("") }
+
     var nombre by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var fecha_inicio by remember { mutableStateOf("") }
@@ -187,12 +189,16 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
     var expanded1 by remember { mutableStateOf(false) }
     var herramientaUtilizada   = remember { mutableStateListOf<String>() }
     var herramienta_id = remember { mutableStateListOf<String>() }
+    var id_principal by remember { mutableStateOf("") }
     var proyecto_ by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
     var nuevoProyect by remember { mutableStateOf(false) }
     var investigador_proyecto = remember { mutableStateListOf<String>() }
     var investigador_id = remember { mutableStateListOf<String>() }
+    var stringherramienta_id_elmi: List<ProyectoHerramienta> = listOf()
+    var investigador_id_eliminate: List<ProyectoInvestigador> = listOf()
+
     var investigador_principal by remember { mutableStateOf<String?>(null) }
     var investigadoresDisponibles = mutableListOf<Investigador>()
     var principalInv  by remember { mutableStateOf("") }
@@ -212,12 +218,14 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                     .verticalScroll(rememberScrollState())
                 ){
 
-                    OutlinedTextField(
-                        value = id_unico,
-                        onValueChange = { id_unico = it },
-                        label = { Text("Ingrese el Id unico del Proyecto") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    if (!proyecto_) {
+                        OutlinedTextField(
+                            value = id_unico,
+                            onValueChange = { id_unico = it },
+                            label = { Text("Ingrese el Id unico del Proyecto") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
 
 
 
@@ -450,6 +458,9 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                         }
                     }
 
+                    val relacionesProyectoInv = tablaintermediade_ProyectoInvestigador.getInvestigadoresPorProyecto(id_unicoEd.toInt()).collectAsState(emptyList())
+                    val relacionesProyectoHer = tablaIntermedia_HerramientaProyecto.getHerramientasPorProyecto(id_unicoEd.toInt()).collectAsState(emptyList())
+
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier
@@ -482,6 +493,8 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                                         esPrincipal = true
                                     )
                                     tablaintermediade_ProyectoInvestigador.incertRelacion(newrelacionPrincipal)
+
+
 
                                     //investigador e proyecto
                                     for (i in investigador_id) {
@@ -521,8 +534,70 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
 
                                     ver_form = false
                                 }else {
-
                                     //Incertar
+                                    val editProyecto = Proyecto(
+                                        id = id_unico.toInt(),
+                                        nombre = nombre,
+                                        fechaInicio = fecha_inicio,
+                                        fechaFin = fecha_fin
+                                    )
+                                    proyectoViewModel.updateProyecto(editProyecto)
+
+                                    //eliminar realciones
+
+                                    for (i in relacionesProyectoHer.value){
+                                        tablaIntermedia_HerramientaProyecto.deleteRelacion(i)
+
+                                    }
+                                    for (i in relacionesProyectoInv.value) {
+                                        i?.let { relacion ->
+                                            if (relacion.esPrincipal != true) {  // Si no es principal, lo eliminamos
+                                                tablaintermediade_ProyectoInvestigador.deleteRelacion(
+                                                    relacion
+                                                )
+                                            } else {
+                                                id_principal = relacion.investigadorId.toString()
+                                            }
+                                        }
+                                    }
+
+                                    for (i in herramienta_id) {
+                                        val newrelacionHerramienta = ProyectoHerramienta(
+                                            proyectoId = id_unicoEd.toInt(),
+                                            herramientaId = i.toInt()
+                                        )
+                                        tablaIntermedia_HerramientaProyecto.incertRelacion(newrelacionHerramienta)
+                                    }
+
+                                    for (i in investigador_id) {
+                                        if (i != id_principal){
+                                        val newrelacion = ProyectoInvestigador(
+                                            proyectoId = id_unicoEd.toInt(),
+                                            investigadorId = i.toInt(),
+                                            esPrincipal = false
+                                        )
+                                        tablaintermediade_ProyectoInvestigador.incertRelacion(newrelacion)
+                                        }
+
+                                    }
+
+
+
+
+
+
+                                    //limpiar
+                                    id_unico = ""
+                                    nombre = ""
+                                    fecha_inicio = ""
+                                    fecha_fin = ""
+                                    investigador_principal = ""
+                                    investigador_id.clear()
+                                    herramienta_id.clear()
+                                    herramientaUtilizada.clear()
+                                    investigador_proyecto.clear()
+                                    ver_form = false
+
 
 
 
@@ -587,6 +662,8 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                       val herramientaState = herramientaViewModel.getHerramientaById(herramientaProyecto.herramientaId).collectAsState(null)
                       herramientaState.value?.let { it.nombre }
                   }
+                  id_unicoEd = proyecto.id.toString()
+
 
 
 
@@ -729,6 +806,11 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                                       nombre = proyecto.nombre
                                       fecha_inicio = proyecto.fechaInicio
                                       fecha_fin = proyecto.fechaFin
+
+                                      stringherramienta_id_elmi = herramientProyec
+
+                                      investigador_id_eliminate = investigadoresProyec as List<ProyectoInvestigador>
+
                                       investigador_principal = nombreinv.find {
                                           it.contains("es Principal    ")
                                       } ?: ""
@@ -736,9 +818,11 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
 
                                       for (i in investigadoresProyec){
                                           investigador_id.add(i!!.investigadorId.toString())
+
                                       }
                                       for (i in nombreherra1){
                                           herramientaUtilizada.add(i)
+
 
                                       }
 
@@ -746,6 +830,7 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
 
                                       for (i in herramientProyec){
                                           herramienta_id.add(i.herramientaId.toString())
+
 
                                       }
                                       for (i in nombreinv){
