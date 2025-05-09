@@ -26,6 +26,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -38,6 +40,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -51,6 +54,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.runtime.traceEventEnd
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +70,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Investigador
+import com.example.sistema_de_gestion_de_investigadores.Data_Base.Proyecto
+import com.example.sistema_de_gestion_de_investigadores.Data_Base.ProyectoHerramienta
+import com.example.sistema_de_gestion_de_investigadores.Data_Base.ProyectoInvestigador
 import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.HerramientaViewModel
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.ProyectoHerramientaViewModel
@@ -158,7 +165,7 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
     val proyectoViewModel = ProyectosViewModel(appContainer.provideProyectoRepository())
     val tablaintermediade_ProyectoInvestigador =
         ProyectoInvestigadorViewModel(appContainer.provideProyectoInvestigadorRepository())
-    val allproyecto by proyectoViewModel.getAllProyectos().collectAsState(emptyList())
+    val allproyecto by proyectoViewModel.proyectos.collectAsState(emptyList())
     val investigadoresViewModel =
         investigadorViewModel(appContainer.provideInvestigadorRepository())
     val allInvestigadores by investigadoresViewModel.investigadores.collectAsState(emptyList())
@@ -183,11 +190,12 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
     var proyecto_ by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
+    var nuevoProyect by remember { mutableStateOf(false) }
     var investigador_proyecto = remember { mutableStateListOf<String>() }
     var investigador_id = remember { mutableStateListOf<String>() }
-    var investigador_principal by remember { mutableStateOf("") }
+    var investigador_principal by remember { mutableStateOf<String?>(null) }
     var investigadoresDisponibles = mutableListOf<Investigador>()
-
+    var principalInv  by remember { mutableStateOf("") }
     Box(
         modifier = Modifier.fillMaxSize()
     ){
@@ -319,6 +327,7 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                             allInvestigadores.forEach { opcion ->
                                 DropdownMenuItem(
                                     onClick = {
+                                        investigador_principal = opcion.nombre
                                         expanded = false
                                     },
                                     text = { Text(opcion.nombre) }
@@ -384,7 +393,8 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                         }
                     }
 
-                     investigadoresDisponibles = allInvestigadores.filter { it.nombre !in investigador_principal }.toMutableList()
+
+                     investigadoresDisponibles = allInvestigadores.filter { it.nombre !in investigador_principal.toString() }.toMutableList()
 
                     //añadir investigadores
                     ExposedDropdownMenuBox(
@@ -450,7 +460,66 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                         Spacer(modifier = Modifier.width(15.dp))
                         Button(
                             onClick = {
-                                ver_form = false
+
+                                if (proyecto_ == false) {
+
+                                    val newProyecto = Proyecto(
+                                        id = id_unico.toInt(),
+                                        nombre = nombre,
+                                        fechaInicio = fecha_inicio,
+                                        fechaFin = fecha_fin
+                                    )
+                                    proyectoViewModel.incertProyecto(newProyecto)
+
+                                    //madar las relaciones
+
+                                    //incertar investigador
+                                    val id_princ  = allInvestigadores.find { it.nombre !in investigador_principal.toString() }
+
+                                    val newrelacionPrincipal  = ProyectoInvestigador(
+                                        proyectoId = id_unico.toInt(),
+                                        investigadorId = id_princ!!.id,
+                                        esPrincipal = true
+                                    )
+                                    tablaintermediade_ProyectoInvestigador.incertRelacion(newrelacionPrincipal)
+
+                                    //investigador e proyecto
+                                    for (i in investigador_id) {
+
+                                        val newrelacion = ProyectoInvestigador(
+                                            proyectoId = id_unico.toInt(),
+                                            investigadorId = i.toInt(),
+                                            esPrincipal = false
+                                        )
+                                        tablaintermediade_ProyectoInvestigador.incertRelacion(newrelacion)
+
+                                    }
+
+                                    //Incertar Herramientas relacion
+
+                                    for (i in herramienta_id){
+
+                                        val newrelacionHerramienta = ProyectoHerramienta(
+                                            proyectoId = id_unico.toInt(),
+                                            herramientaId = i.toInt()
+                                        )
+                                        tablaIntermedia_HerramientaProyecto.incertRelacion(newrelacionHerramienta)
+
+
+                                    }
+
+                                    ver_form = false
+                                }else {
+
+                                    //Incertar
+
+
+
+                                }
+
+
+
+
 
                             },
                             modifier = Modifier
@@ -487,115 +556,192 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
             {
 
               items(allproyecto){ proyecto ->
+                  val herramientProyec by tablaIntermedia_HerramientaProyecto.getHerramientasPorProyecto(proyecto.id).collectAsState(emptyList())
+
+                  val nombreherram = herramientProyec.mapNotNull { herramientaProyecto ->
+                      val herramientaState = herramientaViewModel.getHerramientaById(herramientaProyecto.herramientaId).collectAsState(null)
+                      herramientaState.value?.let { "${it.nombre} (${it.tipo})" }
+                  }
+                  val investigadoresProyec by tablaintermediade_ProyectoInvestigador.getInvestigadoresPorProyecto(proyecto.id).collectAsState(emptyList())
+
+                  val nombreinv = investigadoresProyec.mapNotNull { investigadores ->
+
+                      val nombreState =
+                          investigadoresViewModel.getInvestigadorById(investigadores!!.investigadorId).collectAsState(null)
+
+
+                      val nombre = nombreState.value?.nombre
+                      nombre?.let {
+                          if (investigadores.esPrincipal)
+                              "$it es Principal    "
+                          else
+                              it
+
+                      }
+
+
+                  }
 
 
 
-                  Card (
+                  Card(
                       modifier = Modifier
-                          .fillMaxWidth(),
-                      shape = RoundedCornerShape(16.dp),
-                      colors = CardDefaults.cardColors(containerColor = Color(0xFF4CAF50)),
-                      elevation = CardDefaults.cardElevation(6.dp)
-                  ){
-                      Column(modifier = Modifier.padding(16.dp)) {
+                          .fillMaxWidth()
+                          .padding(12.dp),
+                      shape = RoundedCornerShape(20.dp),
+                      colors = CardDefaults.cardColors(containerColor = Color(0xFF212121)), // Dark background
+                      elevation = CardDefaults.cardElevation(8.dp)
+                  ) {
+                      Column(modifier = Modifier.padding(20.dp)) {
                           Text(
                               text = proyecto.nombre,
-                              fontSize = 22.sp,
+                              fontSize = 24.sp,
                               fontWeight = FontWeight.Bold,
-                              color = Color(0xFF1976D2)
+                              color = Color(0xFFE3F2FD) // Light blue text
+                          )
+                          Spacer(modifier = Modifier.height(8.dp))
+
+                          Text(
+                              text = "Fecha de Inicio: ${proyecto.fechaInicio}",
+                              fontSize = 16.sp,
+                              fontWeight = FontWeight.Medium,
+                              color = Color(0xFFB0BEC5)
                           )
                           Spacer(modifier = Modifier.height(4.dp))
+                          Text(
+                              text = "Fecha de Fin: ${proyecto.fechaFin}",
+                              fontSize = 16.sp,
+                              fontWeight = FontWeight.Medium,
+                              color = Color(0xFFB0BEC5)
+                          )
 
-                          Text("Fecha de Inicio: ${proyecto.fechaInicio}", fontSize = 15.sp , fontWeight = FontWeight.SemiBold )
-                          Spacer(modifier = Modifier.height(2.dp))
-                          Text("Fecha de Fin: ${proyecto.fechaFin}", fontSize = 15.sp , fontWeight = FontWeight.SemiBold )
+                          Spacer(modifier = Modifier.height(16.dp))
 
-                      }
-
-
-                      val herramientProyec by tablaIntermedia_HerramientaProyecto.getHerramientasPorProyecto(proyecto.id).collectAsState(emptyList())
-
-                      val nombreherram = herramientProyec.mapNotNull { herramientaProyecto ->
-                          val herramientaState = herramientaViewModel.getHerramientaById(herramientaProyecto.herramientaId).collectAsState(null)
-                          herramientaState.value?.let { "${it.nombre} (${it.tipo})" }
-                      }
-
-
-
-
-                      // Mini tarjeta para las herramientas
-                      Card(
-                          modifier = Modifier
-                              .fillMaxWidth()
-                              .padding(top = 8.dp),
-                          shape = RoundedCornerShape(12.dp),
-                          colors = CardDefaults.cardColors(containerColor = Color(0xFFFDFDFD)),
-                          elevation = CardDefaults.cardElevation(4.dp)
-                      ) {
-                          Column(modifier = Modifier.padding(12.dp)) {
-                              Text(
-                                  text = "Herramientas Siendo utilizadas en El Proyecto",
-                                  style = MaterialTheme.typography.titleMedium,
-                                  fontWeight = FontWeight.Bold
-                              )
-                              Text(
-                                  text = nombreherram.joinToString(
-                                      ", ",
-                                      prefix = "(",
-                                      postfix = ")"
-                                  ),
-                                  style = MaterialTheme.typography.bodyMedium,
-                                  color = Color(0xFF07247A)
-                              )
-                          }
-                      }
-
-                      val investigadoresProyec by tablaintermediade_ProyectoInvestigador.getInvestigadoresPorProyecto(proyecto.id).collectAsState(emptyList())
-
-                      val nombreinv = investigadoresProyec.mapNotNull { investigadores ->
-
-                          val nombreState =
-                              investigadoresViewModel.getInvestigadorById(investigadores!!.investigadorId).collectAsState(null)
-
-
-                          val nombre = nombreState.value?.nombre
-                          nombre?.let {
-                              if (investigadores.esPrincipal)
-                                  "$it es Principal    "
-                              else
-                                  it
+                          // Mini tarjeta para herramientas
+                          Card(
+                              modifier = Modifier.fillMaxWidth(),
+                              shape = RoundedCornerShape(14.dp),
+                              colors = CardDefaults.cardColors(containerColor = Color(0xFF37474F)), // Gunmetal
+                              elevation = CardDefaults.cardElevation(4.dp)
+                          ) {
+                              Column(modifier = Modifier.padding(16.dp)) {
+                                  Text(
+                                      text = "Herramientas utilizadas",
+                                      fontSize = 18.sp,
+                                      fontWeight = FontWeight.SemiBold,
+                                      color = Color(0xFFFFC107) // Amber
+                                  )
+                                  Spacer(modifier = Modifier.height(4.dp))
+                                  Text(
+                                      text = nombreherram.joinToString(", ", prefix = "(", postfix = ")"),
+                                      fontSize = 14.sp,
+                                      color = Color(0xFFE0F7FA) // Light Cyan
+                                  )
+                              }
                           }
 
-                      }
+                          Spacer(modifier = Modifier.height(12.dp))
+
+                          // Mini tarjeta para investigadores
+                          Card(
+                              modifier = Modifier.fillMaxWidth(),
+                              shape = RoundedCornerShape(14.dp),
+                              colors = CardDefaults.cardColors(containerColor = Color(0xFF263238)), // Blue grey
+                              elevation = CardDefaults.cardElevation(4.dp)
+                          ) {
+                              Column(modifier = Modifier.padding(16.dp)) {
+                                  Text(
+                                      text = "Investigadores del Proyecto",
+                                      fontSize = 18.sp,
+                                      fontWeight = FontWeight.SemiBold,
+                                      color = Color(0xFF80D8FF) // Sky blue
+                                  )
+                                  Spacer(modifier = Modifier.height(4.dp))
+                                  Text(
+                                      text = nombreinv.joinToString(", ", prefix = "(", postfix = ")"),
+                                      fontSize = 14.sp,
+                                      color = Color(0xFFECEFF1) // Light grey
+                                  )
+                              }
+                          }
 
 
-                      // Mini tarjeta para los Investigadores
-                      Card(
-                          modifier = Modifier
-                              .fillMaxWidth()
-                              .padding(top = 8.dp),
-                          shape = RoundedCornerShape(12.dp),
-                          colors = CardDefaults.cardColors(containerColor = Color(0xFFA3D4F5)),
-                          elevation = CardDefaults.cardElevation(4.dp)
-                      ) {
-                          Column(modifier = Modifier.padding(12.dp)) {
-                              Text(
-                                  text = "Investigadores del Proyecto ",
-                                  style = MaterialTheme.typography.titleMedium,
-                                  fontWeight = FontWeight.Bold
-                              )
-                              Text(
-                                  text = nombreinv.joinToString(
-                                      ", ",
-                                      prefix = "(",
-                                      postfix = ")"
-                                  ),
-                                  style = MaterialTheme.typography.bodyMedium,
-                                  color = Color(0xFF060C06)
-                              )
+                          // Botones de eliminar y editar
+                          Row(
+                              modifier = Modifier
+                                  .fillMaxWidth()
+                                  .padding(top = 12.dp),
+                              horizontalArrangement = Arrangement.End
+                          ) {
+                              IconButton(
+                                  onClick = {
+                                      proyectoViewModel.deleteProyecto(proyecto)
+
+
+
+
+
+                                  }
+                              ) {
+                                  Icon(
+                                      Icons.Default.Delete,
+                                      contentDescription = "Eliminar Investigador",
+                                      tint = Color.Red
+                                  )
+                              }
+
+                              Spacer(modifier = Modifier.width(8.dp))
+
+
+
+                              IconButton(
+                                  onClick = {
+                                      ver_form = true
+                                      id_unico = proyecto.id.toString()
+                                      nombre = proyecto.nombre
+                                      fecha_inicio = proyecto.fechaInicio
+                                      fecha_fin = proyecto.fechaFin
+                                      investigador_principal = nombreinv.find {
+                                          it.contains("es Principal    ")
+                                      } ?: ""
+
+
+                                      for (i in investigadoresProyec){
+                                          investigador_id.add(i!!.investigadorId.toString())
+                                      }
+
+
+                                      for (i in herramientProyec){
+                                          herramienta_id.add(i.herramientaId.toString())
+
+                                      }
+
+
+
+
+                                      proyecto_ = true
+
+
+
+
+
+
+
+
+
+
+
+
+                                  }
+                              ) {
+                                  Icon(
+                                      Icons.Default.Edit,
+                                      contentDescription = "Editar Investigador",
+                                      tint = Color.Blue
+                                  )
+                              }
                           }
                       }
-
                   }
 
               }
@@ -626,6 +772,8 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                 fecha_inicio = ""
                 fecha_fin = ""
                 id_unico = ""
+                investigador_principal = ""
+                proyecto_ = false
 
             },
             containerColor = Color(0xFF00BCD4),

@@ -191,9 +191,10 @@ class EstudiantesViewModel(private val estudiantesRepository: EstudiantesReposit
 //ViewModel de los proyectos
 class ProyectosViewModel(private val proyectosRepository: ProyectosRepository) : ViewModel() {
 
-    fun getAllProyectos(): Flow<List<Proyecto>> {
-        return proyectosRepository.getAllProyectos()
-    }
+
+    val proyectos : Flow<List<Proyecto>> = proyectosRepository.getAllProyectos()
+
+
     fun getProyectoById(id: Int): Flow<Proyecto?> {
         return proyectosRepository.getProyectoById(id)
     }

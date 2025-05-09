@@ -181,7 +181,7 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
     val tablaintermediade_InvestigadorLineaTrabajo =
         InvestigadorLineaTrabajoViewModel(appContainer.provideInvestigadorLineaTrabajoRepository())
     val alllinia_trabajo by lineaTrabajoViewModel.getAllLineasTrabajo().collectAsState(emptyList())
-    val allproyecto by proyectoViewModel.getAllProyectos().collectAsState(emptyList())
+    val allproyecto by proyectoViewModel.proyectos.collectAsState(emptyList())
     val allarticulos by articulosViewModel.getAllArticulos().collectAsState(emptyList())
 
     // Variables para el formulario de agregar/editar investigador
