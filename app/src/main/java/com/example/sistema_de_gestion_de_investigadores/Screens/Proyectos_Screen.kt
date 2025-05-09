@@ -508,6 +508,17 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
 
                                     }
 
+                                    //limpiar
+                                    id_unico = ""
+                                    nombre = ""
+                                    fecha_inicio = ""
+                                    fecha_fin = ""
+                                    investigador_principal = ""
+                                    investigador_id.clear()
+                                    herramienta_id.clear()
+                                    herramientaUtilizada.clear()
+                                    investigador_proyecto.clear()
+
                                     ver_form = false
                                 }else {
 
@@ -533,6 +544,15 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                             shape = RectangleShape,
 
                             onClick = {
+                                id_unico = ""
+                                nombre = ""
+                                fecha_inicio = ""
+                                fecha_fin = ""
+                                investigador_principal = ""
+                                investigador_id.clear()
+                                herramienta_id.clear()
+                                herramientaUtilizada.clear()
+                                investigador_proyecto.clear()
                                 ver_form = false
                             }
                         ) {
@@ -562,6 +582,14 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                       val herramientaState = herramientaViewModel.getHerramientaById(herramientaProyecto.herramientaId).collectAsState(null)
                       herramientaState.value?.let { "${it.nombre} (${it.tipo})" }
                   }
+
+                  val nombreherra1 = herramientProyec.mapNotNull { herramientaProyecto ->
+                      val herramientaState = herramientaViewModel.getHerramientaById(herramientaProyecto.herramientaId).collectAsState(null)
+                      herramientaState.value?.let { it.nombre }
+                  }
+
+
+
                   val investigadoresProyec by tablaintermediade_ProyectoInvestigador.getInvestigadoresPorProyecto(proyecto.id).collectAsState(emptyList())
 
                   val nombreinv = investigadoresProyec.mapNotNull { investigadores ->
@@ -709,10 +737,22 @@ fun Body_proyecto(navController: NavController, appContainer: App_Container) {
                                       for (i in investigadoresProyec){
                                           investigador_id.add(i!!.investigadorId.toString())
                                       }
+                                      for (i in nombreherra1){
+                                          herramientaUtilizada.add(i)
+
+                                      }
+
 
 
                                       for (i in herramientProyec){
                                           herramienta_id.add(i.herramientaId.toString())
+
+                                      }
+                                      for (i in nombreinv){
+                                          if (!i.contains("es Principal    ")){
+                                              investigador_proyecto.add(i)
+                                          }
+
 
                                       }
 
