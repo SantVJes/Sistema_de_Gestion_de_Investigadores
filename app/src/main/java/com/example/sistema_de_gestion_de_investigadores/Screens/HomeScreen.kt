@@ -109,12 +109,12 @@ fun Home_screen(navController: NavController, appContainer: App_Container) {
 fun Body_home(navController: NavController, appContainer: App_Container) {
     val opciones = listOf(
         Triple("Investigadores", Directorio.InvestigadoresScreen, Icons.Default.Person),
-        Triple("Proyectos", "proyectos", Icons.Default.DateRange),
+        Triple("Proyectos", Directorio.ProyectosScreen, Icons.Default.DateRange),
         Triple("Herramientas", "herramientas", Icons.Default.Build),
         Triple("Líneas de trabajo", "lineas_trabajo", Icons.Default.Info),
         Triple("Artículos", "articulos", Icons.Default.Email),
         Triple("Áreas de trabajo", "areas_trabajo", Icons.Default.Place),
-        Triple("Sesión de usuario", "perfil_usuario", Icons.Default.AccountCircle)
+        Triple("Estudiantes ", "perfil_usuario", Icons.Default.AccountCircle)
     )
 
     LazyVerticalGrid(

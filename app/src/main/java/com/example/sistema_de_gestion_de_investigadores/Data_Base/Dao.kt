@@ -126,7 +126,8 @@ proyectoDao proporciona acceso a la tabla de proyectos en la base de datos
 @Dao
 interface ProyectosDao{
     @Query("SELECT * FROM Proyecto")
-    suspend fun getAllProyectos(): List<Proyecto>
+     fun getAllProyectos(): Flow<List<Proyecto>>
+
     @Query("SELECT * FROM Proyecto WHERE id = :id")
     suspend fun getProyectoById(id: Int): Proyecto?
     @Insert
