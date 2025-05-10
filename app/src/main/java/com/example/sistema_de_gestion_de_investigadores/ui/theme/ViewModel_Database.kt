@@ -218,6 +218,7 @@ class ProyectosViewModel(private val proyectosRepository: ProyectosRepository) :
 
 //ViewModel de las herramientas
 class HerramientaViewModel(private val herramientaRepository: HerramientaRepository) : ViewModel(){
+    val herramientas : Flow<List<Herramienta>> = herramientaRepository.getAllHerramientas()
 
     fun getAllHerramientas(): Flow<List<Herramienta>> {
         return herramientaRepository.getAllHerramientas()
