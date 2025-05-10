@@ -112,9 +112,9 @@ fun Body_home(navController: NavController, appContainer: App_Container) {
         Triple("Proyectos", Directorio.ProyectosScreen, Icons.Default.DateRange),
         Triple("Herramientas", Directorio.herramientaScreen, Icons.Default.Build),
         Triple("Líneas de trabajo", Directorio.lineas_trabajo, Icons.Default.Info),
-        Triple("Artículos", "articulos", Icons.Default.Email),
-        Triple("Áreas de trabajo", "areas_trabajo", Icons.Default.Place),
-        Triple("Estudiantes ", "perfil_usuario", Icons.Default.AccountCircle)
+        Triple("Artículos", Directorio.articulos_screen, Icons.Default.Email),
+        Triple("Áreas de trabajo", Directorio.areas_screen, Icons.Default.Place),
+        Triple("Estudiantes ",Directorio.estudiantes_screen, Icons.Default.AccountCircle)
     )
 
     LazyVerticalGrid(
