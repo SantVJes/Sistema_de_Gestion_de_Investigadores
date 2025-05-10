@@ -6,4 +6,5 @@ object Directorio {
     val InvestigadoresScreen = "GestionInvestigadoresScreen"
     val ProyectosScreen = "Proyectos_Screen"
     val herramientaScreen = "Herramienta_Screen"
+    val lineas_trabajo = "Lineas_Screen"
 }

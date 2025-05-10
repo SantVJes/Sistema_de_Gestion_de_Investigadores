@@ -111,7 +111,7 @@ fun Body_home(navController: NavController, appContainer: App_Container) {
         Triple("Investigadores", Directorio.InvestigadoresScreen, Icons.Default.Person),
         Triple("Proyectos", Directorio.ProyectosScreen, Icons.Default.DateRange),
         Triple("Herramientas", Directorio.herramientaScreen, Icons.Default.Build),
-        Triple("Líneas de trabajo", "lineas_trabajo", Icons.Default.Info),
+        Triple("Líneas de trabajo", Directorio.lineas_trabajo, Icons.Default.Info),
         Triple("Artículos", "articulos", Icons.Default.Email),
         Triple("Áreas de trabajo", "areas_trabajo", Icons.Default.Place),
         Triple("Estudiantes ", "perfil_usuario", Icons.Default.AccountCircle)

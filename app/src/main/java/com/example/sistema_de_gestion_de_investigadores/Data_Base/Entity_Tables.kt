@@ -39,7 +39,7 @@ data class AreaTrabajo(
 @Entity
 data class LineaTrabajo(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val nombre: String // Robótica, IA, Electrónica, etc.
+    var nombre: String // Robótica, IA, Electrónica, etc.
 )
 
 //Tabla de relación entre investigadores y líneas de trabajo (many-to-many)

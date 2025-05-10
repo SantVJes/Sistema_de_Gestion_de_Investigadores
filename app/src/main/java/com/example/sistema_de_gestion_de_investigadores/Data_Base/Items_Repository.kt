@@ -225,9 +225,9 @@ class AreaTrabajoRepositoryImple(private val areaTrabajoDao: AreasTrabajoDao) : 
 }
 
 class LiniasTrabajoRepositoryImple(private val lineaTrabajoDao: LineasTrabajoDao) : LineasTrabajoRepository {
-    override fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>> = flow {
-        emit(lineaTrabajoDao.getAllLineasTrabajo())
-    }
+    override fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>> =
+        lineaTrabajoDao.getAllLineasTrabajo()
+
     override fun getLineaTrabajoById(id: Int): Flow<LineaTrabajo?> = flow {
         emit(lineaTrabajoDao.getLineaTrabajoById(id))
     }

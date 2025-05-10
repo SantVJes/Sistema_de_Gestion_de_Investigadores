@@ -74,7 +74,7 @@ lineaTrabajoDao proporciona acceso a la tabla de lineas de trabajo en la base de
 @Dao
 interface LineasTrabajoDao{
     @Query("SELECT * FROM LineaTrabajo")
-    suspend fun getAllLineasTrabajo(): List<LineaTrabajo>
+    fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>>
     @Query("SELECT * FROM LineaTrabajo WHERE id = :id")
     suspend fun getLineaTrabajoById(id: Int): LineaTrabajo?
     @Insert
