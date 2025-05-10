@@ -153,7 +153,7 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
     var herram_by by remember { mutableStateOf<Herramienta?>(null) }
 
     //Variables a utilizar
-    var ver_form by remember { mutableStateOf(true) }
+    var ver_form by remember { mutableStateOf(false) }
     var edit by remember { mutableStateOf(false) }
     var nombre by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }
@@ -363,7 +363,7 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp),
+                            .padding(top = 12.dp,end = 14.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         IconButton(
