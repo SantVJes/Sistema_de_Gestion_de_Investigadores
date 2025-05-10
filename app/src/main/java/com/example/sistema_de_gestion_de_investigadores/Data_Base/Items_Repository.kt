@@ -293,9 +293,9 @@ class ProyectoRepositoryImple(private val proyectoDao: ProyectosDao) : Proyectos
     }
 }
 class HerramientaRepositoryImple(private val herramientaDao: HerramientaDao) : HerramientaRepository{
-    override fun getAllHerramientas(): Flow<List<Herramienta>> = flow {
-        emit(herramientaDao.getAllHerramientas())
-    }
+    override fun getAllHerramientas(): Flow<List<Herramienta>> =
+        herramientaDao.getAllHerramientas()
+
     override fun getHerramientaById(id: Int): Flow<Herramienta?> = flow {
         emit(herramientaDao.getHerramientaById(id))
     }

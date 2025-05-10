@@ -110,7 +110,7 @@ fun Body_home(navController: NavController, appContainer: App_Container) {
     val opciones = listOf(
         Triple("Investigadores", Directorio.InvestigadoresScreen, Icons.Default.Person),
         Triple("Proyectos", Directorio.ProyectosScreen, Icons.Default.DateRange),
-        Triple("Herramientas", "herramientas", Icons.Default.Build),
+        Triple("Herramientas", Directorio.herramientaScreen, Icons.Default.Build),
         Triple("Líneas de trabajo", "lineas_trabajo", Icons.Default.Info),
         Triple("Artículos", "articulos", Icons.Default.Email),
         Triple("Áreas de trabajo", "areas_trabajo", Icons.Default.Place),

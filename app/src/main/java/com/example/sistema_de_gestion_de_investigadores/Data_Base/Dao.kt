@@ -144,7 +144,7 @@ herramientaDao proporciona acceso a la tabla de herramientas en la base de datos
 @Dao
 interface HerramientaDao{
     @Query("SELECT * FROM Herramienta")
-    suspend fun getAllHerramientas(): List<Herramienta>
+    fun getAllHerramientas(): Flow<List<Herramienta>>
     @Query("SELECT * FROM Herramienta WHERE id = :id")
     suspend fun getHerramientaById(id: Int): Herramienta?
     @Insert

@@ -199,7 +199,7 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
     var expanded1 by remember { mutableStateOf(false) }
     var areaSeleccionadaNombre by remember { mutableStateOf<String?>(null) }
     var expanded by remember { mutableStateOf(false) }
-    val opcionesSNII = listOf("No tiene", "Capacitacion", "Nivel 1", "Nivel 2", "Nivel 3")
+    val opcionesSNII = listOf("No tiene", "Capacitacion", "Nivel I", "Nivel II", "Nivel III")
     var expanded2 by remember { mutableStateOf(false) }
     val lineasSeleccionadas = remember { mutableStateListOf<String>() }
     val linias_id = remember { mutableStateListOf<String>() }
