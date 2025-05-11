@@ -27,13 +27,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 
-import androidx.compose.material3.DatePickerDefaults.dateFormatter
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -60,7 +60,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,7 +68,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Estudiante
-import com.example.sistema_de_gestion_de_investigadores.Data_Base.LineaTrabajo
 import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.EstudiantesViewModel
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.investigadorViewModel
@@ -162,7 +160,7 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
     val allEstudiantes by estudianteViewModel.getAllEstudiantes().collectAsState(emptyList())
     val investigadorViewModel = investigadorViewModel(appContainer.provideInvestigadorRepository())
     val allInvestigadores by investigadorViewModel.investigadores.collectAsState(emptyList())
-
+    var estu_eli by remember { mutableStateOf<Estudiante?>(null) }
     //Variables a utilizar
     var ver_fomr by remember { mutableStateOf(false) }
     var nombre by remember { mutableStateOf("") }
@@ -393,6 +391,24 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
 
                             } else {
 
+                                estudianteViewModel.deleteEstudiante(estu_eli!!)
+
+                                estu_eli = Estudiante(
+                                    id = id.toInt(),
+                                    nombre = nombre,
+                                    tipo = tipo,
+                                    carrera = carrera,
+                                    escuela = escuela,
+                                    fechaInicio = fechaInicio,
+                                    fechaFin = fechaFin,
+                                    investigadorId = investigadorId!!
+
+                                )
+                                estudianteViewModel.incertEstudiante(estu_eli!!)
+
+
+
+
 
                                 nombre = ""
                                 edit = false
@@ -569,6 +585,7 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
                                     fechaInicio = estudiante.fechaInicio
                                     fechaFin = estudiante.fechaFin
                                     investigadorId = estudiante.investigadorId
+                                    estu_eli = estudiante
                                     nombreinvestigador =
                                         investigadorMaestro.value?.nombre ?: "No asignado"
 
@@ -591,9 +608,32 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
 
             }
         }
+        // Botón para añadir un investigador
+        FloatingActionButton(
+            onClick = {
+                ver_fomr = true
+                nombreinvestigador = ""
+                fechaInicio = ""
+                fechaFin = ""
+                tipo = ""
+                carrera = ""
+                escuela = ""
+                edit = false
+                nombre = ""
+            },
+            containerColor = Color(0xFF00BCD4),
+            contentColor = Color.White,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(1.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Añadir Investigador")
+        }
+
 
 
     }
+
 
 }
 
