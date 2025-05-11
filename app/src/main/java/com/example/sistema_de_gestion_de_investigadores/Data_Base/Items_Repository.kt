@@ -340,9 +340,9 @@ class ProyectoInvestigadorRepositoryImple(private val proyectoInvestigadorDao: P
 }
 
 class ArticuloRepositoryImple(private val articuloDao: ArticuloDao) : ArticuloRepository{
-    override fun getAllArticulos(): Flow<List<Articulo>> = flow {
-        emit(articuloDao.getAllArticulos())
-    }
+    override fun getAllArticulos(): Flow<List<Articulo>> =
+        articuloDao.getAllArticulos()
+
     override fun getArticuloById(id: Int): Flow<Articulo?> = flow {
         emit(articuloDao.getArticuloById(id))
     }

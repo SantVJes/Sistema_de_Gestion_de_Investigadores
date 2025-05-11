@@ -332,6 +332,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
 
                 //Articulos
                 val daoArticulos = instance?.articulosDao()
+
                 val articulos = listOf(
                     Articulo(
                         id = 1,
@@ -339,7 +340,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         revista = "Revista de Software",
                         pais = "México",
                         anio = 2022,
-                        fechaPublicacion = "2022-01-01",
+                        fechaPublicacion = "01/01/2022",
                         doi = "10.1234/abcd1234",
                         url = "https://example.com/articulo1"
                     ),
@@ -349,7 +350,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         revista = "Revista de Robótica",
                         pais = "México",
                         anio = 2021,
-                        fechaPublicacion = "2021-06-01",
+                        fechaPublicacion = "01/06/2021",
                         doi = "10.1234/efgh5678",
                         url = "https://example.com/articulo2"
                     ),
@@ -359,7 +360,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         revista = "Revista de Sistemas",
                         pais = "México",
                         anio = 2020,
-                        fechaPublicacion = "2020-09-01",
+                        fechaPublicacion = "01/09/2020",
                         doi = "10.1234/ijkl9012",
                         url = "https://example.com/articulo3"
                     ),
@@ -368,12 +369,13 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         nombre = "Desarrollo de Plataformas Web",
                         revista = "Revista de Software",
                         pais = "México",
-                        anio = 20,
-                        fechaPublicacion = "2020-07-01",
+                        anio = 2020,
+                        fechaPublicacion = "01/07/2020",
                         doi = "10.1234/mnop3456",
                         url = "https://example.com/articulo4"
                     )
-                    )
+                )
+
 
                 articulos.forEach { articulo ->
                     daoArticulos?.addArticulo(articulo)

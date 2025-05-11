@@ -98,13 +98,13 @@ data class ProyectoInvestigador(
 @Entity
 data class Articulo(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val nombre: String,
-    val revista: String,
-    val pais: String,
-    val anio: Int,
-    val fechaPublicacion: String,
-    val doi: String,
-    val url: String
+    var nombre: String,
+    var revista: String,
+    var pais: String,
+    var anio: Int,
+    var fechaPublicacion: String,
+    var doi: String,
+    var url: String
 )
 
 //Tabla de relación entre investigadores y artículos (many-to-many)
