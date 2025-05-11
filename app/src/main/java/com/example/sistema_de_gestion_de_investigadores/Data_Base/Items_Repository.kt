@@ -199,9 +199,9 @@ class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao
 }
 
 class AreaTrabajoRepositoryImple(private val areaTrabajoDao: AreasTrabajoDao) : AreasTrabajoRepository {
-    override fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>> = flow {
-        emit(areaTrabajoDao.getAllAreasTrabajo())
-    }
+    override fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>> =
+        areaTrabajoDao.getAllAreasTrabajo()
+
     override fun getAreaTrabajoById(id: Int): Flow<AreaTrabajo?> = flow {
         emit(areaTrabajoDao.getAreaTrabajoById(id))
     }

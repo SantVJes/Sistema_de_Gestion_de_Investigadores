@@ -30,9 +30,9 @@ data class Investigador(
 @Entity
 data class AreaTrabajo(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val nombre: String,
-    val jefeArea: String,
-    val lugar: String, //si es ciudad o unidad
+    var nombre: String,
+    var jefeArea: String,
+    var lugar: String, //si es ciudad o unidad
 )
 
 //Tabla Linias de trabajo
