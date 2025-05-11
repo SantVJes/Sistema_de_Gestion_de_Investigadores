@@ -188,7 +188,7 @@ articuloDao proporciona acceso a la tabla de articulos en la base de datos
 @Dao
 interface ArticuloDao{
     @Query("SELECT * FROM Articulo")
-    suspend fun getAllArticulos(): List<Articulo>
+     fun getAllArticulos(): Flow<List<Articulo>>
     @Query("SELECT * FROM Articulo WHERE id = :id")
     suspend fun getArticuloById(id: Int): Articulo?
 
