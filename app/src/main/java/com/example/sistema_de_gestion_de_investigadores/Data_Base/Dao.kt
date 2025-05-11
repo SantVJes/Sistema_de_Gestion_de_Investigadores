@@ -107,7 +107,7 @@ estudianteDao proporciona acceso a la tabla de estudiantes en la base de datos
 @Dao
 interface EstudiantesDao{
     @Query("SELECT * FROM Estudiante")
-    suspend fun getAllEstudiantes(): List<Estudiante>
+    fun getAllEstudiantes(): Flow<List<Estudiante>>
 
     @Query("SELECT * FROM Estudiante WHERE investigadorId = :investigadorId")
     suspend fun getAllEstudianteById(investigadorId: Int): List<Estudiante?>
