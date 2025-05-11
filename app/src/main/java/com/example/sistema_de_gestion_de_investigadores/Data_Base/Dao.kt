@@ -55,7 +55,7 @@ areaTrabajoDao proporciona acceso a la tabla de areas de trabajo en la base de d
 @Dao
 interface AreasTrabajoDao{
     @Query("SELECT * FROM AreaTrabajo")
-    suspend fun getAllAreasTrabajo(): List<AreaTrabajo>
+    fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>>
     @Query("SELECT * FROM AreaTrabajo WHERE id = :id")
     suspend fun getAreaTrabajoById(id: Int): AreaTrabajo?
     @Query("SELECT * FROM AreaTrabajo WHERE nombre = :nombre")
