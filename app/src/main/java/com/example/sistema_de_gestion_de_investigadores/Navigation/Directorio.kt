@@ -7,4 +7,8 @@ object Directorio {
     val ProyectosScreen = "Proyectos_Screen"
     val herramientaScreen = "Herramienta_Screen"
     val lineas_trabajo = "Lineas_Screen"
+    val areas_screen = "Areas_Screen"
+    val articulos_screen = "Articulos_Screen"
+    val estudiantes_screen = "Estudiantes_Screen"
+
 }
