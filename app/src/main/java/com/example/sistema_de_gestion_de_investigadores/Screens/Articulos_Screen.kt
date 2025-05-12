@@ -3,7 +3,6 @@
 package com.example.sistema_de_gestion_de_investigadores.Screens
 
 import android.app.DatePickerDialog
-import android.view.View
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -74,15 +73,12 @@ import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Articulo
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.ArticuloInvestigador
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Investigador
-import com.example.sistema_de_gestion_de_investigadores.Data_Base.LineaTrabajo
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.ProyectoHerramienta
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.ProyectoInvestigador
 import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.ArticuloInvestigadorViewModel
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.ArticuloViewModel
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.investigadorViewModel
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.mapNotNull
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -168,19 +164,19 @@ fun Articulos_Screen(navController: NavController, appContainer: App_Container) 
 fun Body_Articulo(navController: NavController, appContainer: App_Container) {
 
     //Estados para controlar la base de datos
-    val tablaintermediade_ArticuloInvestigador = ArticuloInvestigadorViewModel(appContainer.provideArticuloInvestigadorRepository())
+    val tablaintermediade_ArticuloInvestigador =
+        ArticuloInvestigadorViewModel(appContainer.provideArticuloInvestigadorRepository())
     val articulosViewModel = ArticuloViewModel(appContainer.provideArticuloRepository())
     val allArticulos by articulosViewModel.getAllArticulos().collectAsState(emptyList())
     val investigadoresViewModel =
         investigadorViewModel(appContainer.provideInvestigadorRepository())
-    var stringherramienta_id_elmi: List<ProyectoHerramienta> = listOf()
-    var investigador_id_eliminate: List<ProyectoInvestigador> = listOf()
+
 
     // Recolectamos el Flow en un State observable
     val allInvestigadores by investigadoresViewModel.investigadores.collectAsState(emptyList())
     var investigador_principal by remember { mutableStateOf<String?>(null) }
     var investigadoresDisponibles = mutableListOf<Investigador>()
-    var art by remember {  mutableStateOf<Articulo?>(null)}
+    var art by remember { mutableStateOf<Articulo?>(null) }
 
     //Variables a utilizar
     var ver_form by remember { mutableStateOf(false) }
@@ -209,14 +205,14 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
 
         Column(modifier = Modifier.padding(16.dp)) {
 
-            if(ver_form){
+            if (ver_form) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp)
                         .verticalScroll(rememberScrollState()),
                 ) {
-                    if (edit == false ) {
+                    if (edit == false) {
                         OutlinedTextField(
                             value = id_unico,
                             onValueChange = { id_unico = it },
@@ -245,11 +241,6 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                         label = { Text("País") },
                         modifier = Modifier.fillMaxWidth()
                     )
-
-
-
-
-
 
                     // Mostrar el DatePickerDialog al hacer clic
                     val datePickerDialog = remember {
@@ -288,10 +279,6 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                         }
                     }
 
-
-
-
-
                     OutlinedTextField(
                         value = doi,
                         onValueChange = { doi = it },
@@ -312,7 +299,8 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                         onExpandedChange = { expanded = !expanded }
                     ) {
                         OutlinedTextField(
-                            value = investigador_principal ?: "selecione  el investigador principal ",
+                            value = investigador_principal
+                                ?: "selecione  el investigador principal ",
                             onValueChange = {},
                             label = { Text("Investigador Principal del articulo") },
                             modifier = Modifier
@@ -340,7 +328,9 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                     }
 
 
-                    investigadoresDisponibles = allInvestigadores.filter { it.nombre !in investigador_principal.toString() }.toMutableList()
+                    investigadoresDisponibles =
+                        allInvestigadores.filter { it.nombre !in investigador_principal.toString() }
+                            .toMutableList()
 
                     //añadir investigadores
                     ExposedDropdownMenuBox(
@@ -395,7 +385,10 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                             }
                         }
                     }
-                    val tablaintermediade  = tablaintermediade_ArticuloInvestigador.getInvestigadoresPorArticulo(id_unicoEd.toInt()).collectAsState(emptyList())
+                    val tablaintermediade =
+                        tablaintermediade_ArticuloInvestigador.getInvestigadoresPorArticulo(
+                            id_unicoEd.toInt()
+                        ).collectAsState(emptyList())
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
@@ -421,7 +414,8 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                         url = url,
                                     )
                                     articulosViewModel.incertArticulo(newarticulo)
-                                    val id_princ  = allInvestigadores.find { it.nombre !in investigador_principal.toString() }
+                                    val id_princ =
+                                        allInvestigadores.find { it.nombre !in investigador_principal.toString() }
 
                                     val newarticuloinvestigador = ArticuloInvestigador(
                                         articuloId = id_unico.toInt(),
@@ -429,14 +423,18 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                         esPrincipal = true
 
                                     )
-                                    tablaintermediade_ArticuloInvestigador.incertRelacion(newarticuloinvestigador)
-                                    for (i in investigador_id){
+                                    tablaintermediade_ArticuloInvestigador.incertRelacion(
+                                        newarticuloinvestigador
+                                    )
+                                    for (i in investigador_id) {
                                         val newarticuloinvestigador = ArticuloInvestigador(
                                             articuloId = id_unico.toInt(),
                                             investigadorId = i.toInt(),
                                             esPrincipal = false
                                         )
-                                        tablaintermediade_ArticuloInvestigador.incertRelacion(newarticuloinvestigador)
+                                        tablaintermediade_ArticuloInvestigador.incertRelacion(
+                                            newarticuloinvestigador
+                                        )
 
                                     }
                                     nombre = ""
@@ -501,21 +499,7 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                                 newarticuloinvestigador
                                             )
                                         }
-
-
-
                                     }
-
-
-
-
-
-
-
-
-
-
-
                                     nombre = ""
                                     revista = ""
                                     pais = ""
@@ -529,12 +513,7 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                     investigadoresDisponibles.clear()
                                     art = null
                                     id_unico = ""
-
-
-
                                     ver_form = false
-
-
                                 }
                             },
                             modifier = Modifier
@@ -546,7 +525,6 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                         Spacer(modifier = Modifier.width(5.dp))
                         Button(
                             shape = RectangleShape,
-
                             onClick = {
                                 edit = false
                                 nombre = ""
@@ -570,22 +548,24 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                             Icon(Icons.Default.Close, contentDescription = "Salir form")
                         }
                     }
-
-
-
-
                 }
             }
 
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(horizontal = 16.dp))
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
             {
-                items(allArticulos){ articulo ->
-                    val inveart by tablaintermediade_ArticuloInvestigador.getInvestigadoresPorArticulo(articulo.id).collectAsState(emptyList())
+                items(allArticulos) { articulo ->
+                    val inveart by tablaintermediade_ArticuloInvestigador.getInvestigadoresPorArticulo(
+                        articulo.id
+                    ).collectAsState(emptyList())
 
-                    val  nombresCompletos = inveart.mapNotNull { investigador ->
+                    val nombresCompletos = inveart.mapNotNull { investigador ->
 
-                        val nombreState = investigadoresViewModel.getInvestigadorById(investigador.investigadorId).collectAsState(null)
+                        val nombreState =
+                            investigadoresViewModel.getInvestigadorById(investigador.investigadorId)
+                                .collectAsState(null)
 
                         val principalin = nombreState.value?.nombre
                         principalin?.let {
@@ -594,11 +574,8 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                             else
                                 it
                         }
-
-
                     }
                     id_unicoEd = articulo.id.toString()
-
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -620,14 +597,33 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Text(text = "📘 Revista: ${articulo.revista}", style = MaterialTheme.typography.bodyMedium)
-                                Text(text = "🌎 País: ${articulo.pais}", style = MaterialTheme.typography.bodyMedium)
-                                Text(text = "📅 Año: ${articulo.anio}", style = MaterialTheme.typography.bodyMedium)
-                                Text(text = "🗓️ Fecha de Publicación: ${articulo.fechaPublicacion}", style = MaterialTheme.typography.bodyMedium)
-                                Text(text = "🔗 DOI: ${articulo.doi}", style = MaterialTheme.typography.bodyMedium)
+                                Text(
+                                    text = "📘 Revista: ${articulo.revista}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = "🌎 País: ${articulo.pais}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = "📅 Año: ${articulo.anio}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = "🗓️ Fecha de Publicación: ${articulo.fechaPublicacion}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = "🔗 DOI: ${articulo.doi}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                                 Text(
                                     text = "🌐 URL: ${articulo.url}",
-                                    style = MaterialTheme.typography.bodyMedium.copy(color = Color(0xFF1565C0)),
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        color = Color(
+                                            0xFF1565C0
+                                        )
+                                    ),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -659,7 +655,7 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(top = 12.dp,end = 14.dp),
+                                        .padding(top = 12.dp, end = 14.dp),
                                     horizontalArrangement = Arrangement.End
                                 ) {
                                     IconButton(
@@ -696,18 +692,17 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                                 it.contains("es Principal    ")
                                             } ?: ""
 
-                                            for (i in nombresCompletos){
-                                                if (!i.contains("es Principal    ")){
+                                            for (i in nombresCompletos) {
+                                                if (!i.contains("es Principal    ")) {
                                                     investigador_proyecto.add(i)
                                                 }
 
 
                                             }
-                                            for (i in inveart){
+                                            for (i in inveart) {
                                                 investigador_id.add(i!!.investigadorId.toString())
 
                                             }
-
 
 
                                         },
@@ -720,23 +715,8 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
                                     }
                                 }
                             }
-
                         }
-
-
-
-
-
-
-
-
-
-
                     }
-
-
-
-
                 }
             }
 
@@ -745,20 +725,13 @@ fun Body_Articulo(navController: NavController, appContainer: App_Container) {
         // Botón para añadir un investigador
         FloatingActionButton(
             onClick = {
-                ver_form= true
-
+                ver_form = true
                 nombre = ""
                 id_unico = ""
                 investigador_principal = ""
                 investigador_proyecto.clear()
                 investigador_id.clear()
                 edit = false
-
-
-
-
-
-
             },
             containerColor = Color(0xFF00BCD4),
             contentColor = Color.White,

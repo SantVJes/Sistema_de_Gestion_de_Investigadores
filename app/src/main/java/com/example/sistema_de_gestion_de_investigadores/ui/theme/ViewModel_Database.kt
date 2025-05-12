@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 
-
 //ViewModel de los usuarios
 class userViewModel(private val userRepository: UsuariosRepository) : ViewModel() {
 
@@ -41,38 +40,43 @@ class userViewModel(private val userRepository: UsuariosRepository) : ViewModel(
     }
 
 
-    fun incertUser(user: Usuario){
-        viewModelScope.launch{
+    fun incertUser(user: Usuario) {
+        viewModelScope.launch {
             userRepository.addUsuario(user)
         }
 
     }
-    fun updateUser(user: Usuario){
-        viewModelScope.launch{
+
+    fun updateUser(user: Usuario) {
+        viewModelScope.launch {
             userRepository.updateUsuario(user)
         }
     }
-    fun deleteUser(user: Usuario){
-        viewModelScope.launch{
+
+    fun deleteUser(user: Usuario) {
+        viewModelScope.launch {
             userRepository.deleteUsuario(user)
         }
     }
 }
 
 //ViewModel de los investigadores
-class investigadorViewModel(private val investigadorRepository: InvestigadoresRepository) : ViewModel() {
+class investigadorViewModel(private val investigadorRepository: InvestigadoresRepository) :
+    ViewModel() {
 
-    val investigadores : Flow<List<Investigador>> = investigadorRepository.getAllInvestigadores()
+    val investigadores: Flow<List<Investigador>> = investigadorRepository.getAllInvestigadores()
 
 
     fun getInvestigadorById(id: Int): Flow<Investigador?> {
         return investigadorRepository.getInvestigadorById(id)
     }
+
     fun incertInvestigador(investigador: Investigador) {
         viewModelScope.launch {
             investigadorRepository.addInvestigador(investigador)
         }
     }
+
     fun updateInvestigador(investigador: Investigador) {
         viewModelScope.launch {
             investigadorRepository.updateInvestigador(investigador)
@@ -91,22 +95,27 @@ class investigadorViewModel(private val investigadorRepository: InvestigadoresRe
 
 //ViewModel de las Areas de trabajo
 
-class AreaTrabajoViewModel(private val areaTrabajoRepository: AreasTrabajoRepository) : ViewModel() {
+class AreaTrabajoViewModel(private val areaTrabajoRepository: AreasTrabajoRepository) :
+    ViewModel() {
 
     fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>> {
         return areaTrabajoRepository.getAllAreasTrabajo()
     }
+
     fun getAreaTrabajoById(id: Int): Flow<AreaTrabajo?> {
         return areaTrabajoRepository.getAreaTrabajoById(id)
     }
+
     fun getAreaTrabajoByNombre(nombre: String): Flow<AreaTrabajo?> {
         return areaTrabajoRepository.getAreaTrabajoByNombre(nombre)
     }
+
     fun incertAreaTrabajo(areaTrabajo: AreaTrabajo) {
         viewModelScope.launch {
             areaTrabajoRepository.addAreaTrabajo(areaTrabajo)
         }
     }
+
     fun updateAreaTrabajo(areaTrabajo: AreaTrabajo) {
         viewModelScope.launch {
             areaTrabajoRepository.updateAreaTrabajo(areaTrabajo)
@@ -122,23 +131,28 @@ class AreaTrabajoViewModel(private val areaTrabajoRepository: AreasTrabajoReposi
 
 //ViewModel Lineas de trabajo
 
-class LineaTrabajoViewModel(private val lineaTrabajoRepository: LineasTrabajoRepository) : ViewModel() {
+class LineaTrabajoViewModel(private val lineaTrabajoRepository: LineasTrabajoRepository) :
+    ViewModel() {
     fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>> {
         return lineaTrabajoRepository.getAllLineasTrabajo()
     }
+
     fun getLineaTrabajoById(id: Int): Flow<LineaTrabajo?> {
         return lineaTrabajoRepository.getLineaTrabajoById(id)
     }
+
     fun incertLineaTrabajo(lineaTrabajo: LineaTrabajo) {
         viewModelScope.launch {
             lineaTrabajoRepository.addLineaTrabajo(lineaTrabajo)
         }
     }
+
     fun updateLineaTrabajo(lineaTrabajo: LineaTrabajo) {
         viewModelScope.launch {
             lineaTrabajoRepository.updateLineaTrabajo(lineaTrabajo)
         }
     }
+
     fun deleteLineaTrabajo(lineaTrabajo: LineaTrabajo) {
         viewModelScope.launch {
             lineaTrabajoRepository.deleteLineaTrabajo(lineaTrabajo)
@@ -149,7 +163,8 @@ class LineaTrabajoViewModel(private val lineaTrabajoRepository: LineasTrabajoRep
 
 //View Model de la tabla intermedia de InvestigadorLineaTrabajo
 
-class InvestigadorLineaTrabajoViewModel(private val investigadorLineaTrabajoRepository: InvestigadorLineaTrabajoRepository) : ViewModel() {
+class InvestigadorLineaTrabajoViewModel(private val investigadorLineaTrabajoRepository: InvestigadorLineaTrabajoRepository) :
+    ViewModel() {
 
     fun getLineasPorInvestigador(investigadorId: Int): Flow<List<InvestigadorLineaTrabajo>> {
         return investigadorLineaTrabajoRepository.getLineasPorInvestigador(investigadorId)
@@ -160,6 +175,7 @@ class InvestigadorLineaTrabajoViewModel(private val investigadorLineaTrabajoRepo
             investigadorLineaTrabajoRepository.addRelacion(relacion)
         }
     }
+
     fun deleteRelacion(relacion: InvestigadorLineaTrabajo) {
         viewModelScope.launch {
             investigadorLineaTrabajoRepository.deleteRelacion(relacion)
@@ -172,14 +188,17 @@ class EstudiantesViewModel(private val estudiantesRepository: EstudiantesReposit
     fun getAllEstudiantes(): Flow<List<Estudiante>> {
         return estudiantesRepository.getAllEstudiantes()
     }
+
     fun getAllEstudianteById(investigadorId: Int): Flow<List<Estudiante?>> {
         return estudiantesRepository.getAllEstudianteById(investigadorId)
     }
+
     fun incertEstudiante(estudiante: Estudiante) {
         viewModelScope.launch {
             estudiantesRepository.addEstudiante(estudiante)
         }
     }
+
     fun deleteEstudiante(estudiante: Estudiante) {
         viewModelScope.launch {
             estudiantesRepository.deleteEstudiante(estudiante)
@@ -191,22 +210,25 @@ class EstudiantesViewModel(private val estudiantesRepository: EstudiantesReposit
 class ProyectosViewModel(private val proyectosRepository: ProyectosRepository) : ViewModel() {
 
 
-    val proyectos : Flow<List<Proyecto>> = proyectosRepository.getAllProyectos()
+    val proyectos: Flow<List<Proyecto>> = proyectosRepository.getAllProyectos()
 
 
     fun getProyectoById(id: Int): Flow<Proyecto?> {
         return proyectosRepository.getProyectoById(id)
     }
+
     fun incertProyecto(proyecto: Proyecto) {
         viewModelScope.launch {
             proyectosRepository.addProyecto(proyecto)
         }
     }
+
     fun deleteProyecto(proyecto: Proyecto) {
         viewModelScope.launch {
             proyectosRepository.deleteProyecto(proyecto)
         }
     }
+
     fun updateProyecto(proyecto: Proyecto) {
         viewModelScope.launch {
             proyectosRepository.updateProyecto(proyecto)
@@ -216,21 +238,24 @@ class ProyectosViewModel(private val proyectosRepository: ProyectosRepository) :
 }
 
 //ViewModel de las herramientas
-class HerramientaViewModel(private val herramientaRepository: HerramientaRepository) : ViewModel(){
-    val herramientas : Flow<List<Herramienta>> = herramientaRepository.getAllHerramientas()
+class HerramientaViewModel(private val herramientaRepository: HerramientaRepository) : ViewModel() {
+    val herramientas: Flow<List<Herramienta>> = herramientaRepository.getAllHerramientas()
 
     fun getAllHerramientas(): Flow<List<Herramienta>> {
         return herramientaRepository.getAllHerramientas()
     }
+
     fun getHerramientaById(id: Int): Flow<Herramienta?> {
         return herramientaRepository.getHerramientaById(id)
 
     }
+
     fun incertHerramienta(herramienta: Herramienta) {
         viewModelScope.launch {
             herramientaRepository.addHerramienta(herramienta)
         }
     }
+
     fun deleteHerramienta(herramienta: Herramienta) {
         viewModelScope.launch {
             herramientaRepository.deleteHerramienta(herramienta)
@@ -240,15 +265,18 @@ class HerramientaViewModel(private val herramientaRepository: HerramientaReposit
 }
 
 //ViewModel de la tabla intermedia de ProyectoHerramienta
-class ProyectoHerramientaViewModel(private val proyectoHerramientaRepository: ProyectoHerramientaRepository) : ViewModel() {
+class ProyectoHerramientaViewModel(private val proyectoHerramientaRepository: ProyectoHerramientaRepository) :
+    ViewModel() {
     fun getHerramientasPorProyecto(proyectoId: Int): Flow<List<ProyectoHerramienta>> {
         return proyectoHerramientaRepository.getHerramientasPorProyecto(proyectoId)
     }
+
     fun incertRelacion(relacion: ProyectoHerramienta) {
         viewModelScope.launch {
             proyectoHerramientaRepository.addRelacion(relacion)
         }
     }
+
     fun deleteRelacion(relacion: ProyectoHerramienta) {
         viewModelScope.launch {
             proyectoHerramientaRepository.deleteRelacion(relacion)
@@ -259,18 +287,22 @@ class ProyectoHerramientaViewModel(private val proyectoHerramientaRepository: Pr
 
 //ViewModel de la tabla intermedia de ProyectoInvestigador
 
-class ProyectoInvestigadorViewModel(private val proyectoInvestigadorRepository: ProyectoInvestigadorRepository) : ViewModel(){
+class ProyectoInvestigadorViewModel(private val proyectoInvestigadorRepository: ProyectoInvestigadorRepository) :
+    ViewModel() {
     fun getInvestigadoresPorProyecto(proyectoId: Int): Flow<List<ProyectoInvestigador?>> {
         return proyectoInvestigadorRepository.getInvestigadoresPorProyecto(proyectoId)
     }
+
     fun getProyectoPorInvestigador(investigadorId: Int): Flow<List<ProyectoInvestigador?>> {
         return proyectoInvestigadorRepository.getProyectoPorInvestigador(investigadorId)
     }
+
     fun incertRelacion(relacion: ProyectoInvestigador) {
         viewModelScope.launch {
             proyectoInvestigadorRepository.addRelacion(relacion)
         }
     }
+
     fun deleteRelacion(relacion: ProyectoInvestigador) {
         viewModelScope.launch {
             proyectoInvestigadorRepository.deleteRelacion(relacion)
@@ -284,19 +316,23 @@ class ArticuloViewModel(private val articuloRepository: ArticuloRepository) : Vi
     fun getAllArticulos(): Flow<List<Articulo>> {
         return articuloRepository.getAllArticulos()
     }
+
     fun getArticuloById(id: Int): Flow<Articulo?> {
         return articuloRepository.getArticuloById(id)
     }
+
     fun incertArticulo(articulo: Articulo) {
         viewModelScope.launch {
             articuloRepository.addArticulo(articulo)
         }
     }
+
     fun updateArticulo(articulo: Articulo) {
         viewModelScope.launch {
             articuloRepository.updateArticulo(articulo)
         }
     }
+
     fun deleteArticulo(articulo: Articulo) {
         viewModelScope.launch {
             articuloRepository.deleteArticulo(articulo)
@@ -306,18 +342,22 @@ class ArticuloViewModel(private val articuloRepository: ArticuloRepository) : Vi
 
 //ViewModel de la tabla intermedia de ArticuloInvestigador
 
-class ArticuloInvestigadorViewModel(private val articuloInvestigadorRepository: ArticuloInvestigadorRepository) : ViewModel() {
+class ArticuloInvestigadorViewModel(private val articuloInvestigadorRepository: ArticuloInvestigadorRepository) :
+    ViewModel() {
     fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> {
         return articuloInvestigadorRepository.getInvestigadoresPorArticulo(articuloId)
     }
+
     fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador?>> {
         return articuloInvestigadorRepository.getArticuloPorInvestigador(investigadorId)
     }
+
     fun incertRelacion(relacion: ArticuloInvestigador) {
         viewModelScope.launch {
             articuloInvestigadorRepository.addRelacion(relacion)
         }
     }
+
     fun deleteRelacion(relacion: ArticuloInvestigador) {
         viewModelScope.launch {
             articuloInvestigadorRepository.deleteRelacion(relacion)
@@ -332,22 +372,27 @@ class eventosViewModel(private val eventosRepository: EventosRepository) : ViewM
     fun getAllEventos(): Flow<List<Evento>> {
         return eventosRepository.getAllEventos()
     }
+
     fun getEventoById(id: Int): Flow<Evento?> {
         return eventosRepository.getEventoById(id)
-        }
+    }
+
     fun getEventoByInvestigador(investigadorId: Int): Flow<List<Evento?>> {
         return eventosRepository.getEventoByInvestigador(investigadorId)
     }
+
     fun incertEvento(evento: Evento) {
         viewModelScope.launch {
             eventosRepository.addEvento(evento)
         }
     }
+
     fun updateEvento(evento: Evento) {
         viewModelScope.launch {
             eventosRepository.updateEvento(evento)
         }
     }
+
     fun deleteEvento(evento: Evento) {
         viewModelScope.launch {
             eventosRepository.deleteEvento(evento)

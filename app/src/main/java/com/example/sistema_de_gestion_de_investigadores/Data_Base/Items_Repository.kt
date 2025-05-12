@@ -4,13 +4,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-
 //Interfaces de las tablas de la base de datos
 
 /*
 Repositorio de usuarios que proporciona ,login, agregar, actualizar y eliminar usuarios
  */
-interface UsuariosRepository{
+interface UsuariosRepository {
     fun login(username: String, password: String): Flow<Boolean?>
     suspend fun addUsuario(usuario: Usuario)
     suspend fun updateUsuario(usuario: Usuario)
@@ -20,17 +19,18 @@ interface UsuariosRepository{
 /*
 Repositorio de investigadores que proporciona obtener a todos, obtener por id, agregar, actualizar y eliminar investigadores
  */
-interface InvestigadoresRepository{
+interface InvestigadoresRepository {
     fun getAllInvestigadores(): Flow<List<Investigador>>
     fun getInvestigadorById(id: Int): Flow<Investigador?>
     suspend fun addInvestigador(investigador: Investigador)
     suspend fun updateInvestigador(investigador: Investigador)
     suspend fun deleteInvestigador(investigador: Investigador)
 }
+
 /*
     Repositorio de Areas de trabajo que proporciona obtener a todas, obtener por id o nombre, agregar, actualizar y eliminar areas de trabajo
  */
-interface AreasTrabajoRepository{
+interface AreasTrabajoRepository {
     fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>>
     fun getAreaTrabajoById(id: Int): Flow<AreaTrabajo?>
     fun getAreaTrabajoByNombre(nombre: String): Flow<AreaTrabajo?>
@@ -39,16 +39,18 @@ interface AreasTrabajoRepository{
     suspend fun deleteAreaTrabajo(areaTrabajo: AreaTrabajo)
 
 }
+
 /*
 Repositorio de Lineas de trabajo que proporciona obtener a todas, obtener por id, agregar, actualizar y eliminar lineas de trabajo
  */
-interface LineasTrabajoRepository{
+interface LineasTrabajoRepository {
     fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>>
     fun getLineaTrabajoById(id: Int): Flow<LineaTrabajo?>
     suspend fun addLineaTrabajo(lineaTrabajo: LineaTrabajo)
     suspend fun updateLineaTrabajo(lineaTrabajo: LineaTrabajo)
     suspend fun deleteLineaTrabajo(lineaTrabajo: LineaTrabajo)
 }
+
 /*
   Repositorio de la tabla intermedia de InvestigadorLiniaTrabajo que proporciona obtener lineas de trabajo por
   investigador, agregar, y eliminar lineas de trabajo por investigador
@@ -61,6 +63,7 @@ interface InvestigadorLineaTrabajoRepository {
 
     suspend fun deleteRelacion(relacion: InvestigadorLineaTrabajo)
 }
+
 /*
 Repositorio de estudiantes que proporciona obtener a todos, obtener por id de su investigador, agregar, actualizar y eliminar estudiantes
  */
@@ -86,7 +89,7 @@ interface ProyectosRepository {
 /*
  Repositorio de herramientas que proporciona  obtener por id, agregar  y eliminar herramientas
  */
-interface HerramientaRepository{
+interface HerramientaRepository {
     fun getAllHerramientas(): Flow<List<Herramienta>>
     fun getHerramientaById(id: Int): Flow<Herramienta?>
     suspend fun addHerramienta(herramienta: Herramienta)
@@ -121,7 +124,7 @@ interface ProyectoInvestigadorRepository {
 /*
 Repositorio de articulos que proporciona obtener a todos, obtener por id, agregar, actualizar y eliminar articulos
  */
-interface ArticuloRepository{
+interface ArticuloRepository {
     fun getAllArticulos(): Flow<List<Articulo>>
     fun getArticuloById(id: Int): Flow<Articulo?>
     suspend fun addArticulo(articulo: Articulo)
@@ -145,7 +148,7 @@ Repositorio de eventos que proporciona obtener a todos, obtener por id, agregar,
 
  */
 
-interface EventosRepository{
+interface EventosRepository {
     fun getAllEventos(): Flow<List<Evento>>
     fun getEventoById(id: Int): Flow<Evento?>
     fun getEventoByInvestigador(investigadorId: Int): Flow<List<Evento?>>
@@ -168,16 +171,19 @@ class UsuarioRepositoryImple(private val userDao: UsuariosDao) : UsuariosReposit
     override suspend fun addUsuario(usuario: Usuario) {
         userDao.addUsuario(usuario)
     }
+
     override suspend fun updateUsuario(usuario: Usuario) {
         userDao.updateUsuario(usuario)
     }
+
     override suspend fun deleteUsuario(usuario: Usuario) {
         userDao.deleteUsuario(usuario)
     }
 
 }
 
-class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao) : InvestigadoresRepository {
+class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao) :
+    InvestigadoresRepository {
 
     override fun getAllInvestigadores(): Flow<List<Investigador>> =
         investigadorDao.getAllInvestigadores()
@@ -185,12 +191,15 @@ class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao
     override fun getInvestigadorById(id: Int): Flow<Investigador?> = flow {
         emit(investigadorDao.getInvestigadorById(id))
     }
+
     override suspend fun addInvestigador(investigador: Investigador) {
         investigadorDao.addInvestigador(investigador)
     }
+
     override suspend fun updateInvestigador(investigador: Investigador) {
         investigadorDao.updateInvestigador(investigador)
     }
+
     override suspend fun deleteInvestigador(investigador: Investigador) {
         investigadorDao.deleteInvestigador(investigador)
 
@@ -198,19 +207,23 @@ class InvestigadorRepositoryImple(private val investigadorDao: InvestigadoresDao
 
 }
 
-class AreaTrabajoRepositoryImple(private val areaTrabajoDao: AreasTrabajoDao) : AreasTrabajoRepository {
+class AreaTrabajoRepositoryImple(private val areaTrabajoDao: AreasTrabajoDao) :
+    AreasTrabajoRepository {
     override fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>> =
         areaTrabajoDao.getAllAreasTrabajo()
 
     override fun getAreaTrabajoById(id: Int): Flow<AreaTrabajo?> = flow {
         emit(areaTrabajoDao.getAreaTrabajoById(id))
     }
+
     override fun getAreaTrabajoByNombre(nombre: String): Flow<AreaTrabajo?> = flow {
         emit(areaTrabajoDao.getAreaTrabajoByNombre(nombre))
     }
+
     override suspend fun addAreaTrabajo(areaTrabajo: AreaTrabajo) {
         areaTrabajoDao.addAreaTrabajo(areaTrabajo)
     }
+
     override suspend fun updateAreaTrabajo(areaTrabajo: AreaTrabajo) {
         areaTrabajoDao.updateAreaTrabajo(areaTrabajo)
     }
@@ -220,35 +233,41 @@ class AreaTrabajoRepositoryImple(private val areaTrabajoDao: AreasTrabajoDao) : 
     }
 
 
-
-
 }
 
-class LiniasTrabajoRepositoryImple(private val lineaTrabajoDao: LineasTrabajoDao) : LineasTrabajoRepository {
+class LiniasTrabajoRepositoryImple(private val lineaTrabajoDao: LineasTrabajoDao) :
+    LineasTrabajoRepository {
     override fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>> =
         lineaTrabajoDao.getAllLineasTrabajo()
 
     override fun getLineaTrabajoById(id: Int): Flow<LineaTrabajo?> = flow {
         emit(lineaTrabajoDao.getLineaTrabajoById(id))
     }
+
     override suspend fun addLineaTrabajo(lineaTrabajo: LineaTrabajo) {
         lineaTrabajoDao.addLineaTrabajo(lineaTrabajo)
     }
+
     override suspend fun updateLineaTrabajo(lineaTrabajo: LineaTrabajo) {
         lineaTrabajoDao.updateLineaTrabajo(lineaTrabajo)
     }
+
     override suspend fun deleteLineaTrabajo(lineaTrabajo: LineaTrabajo) {
         lineaTrabajoDao.deleteLineaTrabajo(lineaTrabajo)
     }
 }
 
-class InvestigadorLineaTrabajoRepositoryImple(private val investigadorLineaTrabajoDao: InvestigadorLineaTrabajoDao) : InvestigadorLineaTrabajoRepository{
-    override fun getLineasPorInvestigador(investigadorId: Int): Flow<List<InvestigadorLineaTrabajo>> = flow {
-        emit(investigadorLineaTrabajoDao.getLineasPorInvestigador(investigadorId))
-    }
+class InvestigadorLineaTrabajoRepositoryImple(private val investigadorLineaTrabajoDao: InvestigadorLineaTrabajoDao) :
+    InvestigadorLineaTrabajoRepository {
+    override fun getLineasPorInvestigador(investigadorId: Int): Flow<List<InvestigadorLineaTrabajo>> =
+        flow {
+            emit(investigadorLineaTrabajoDao.getLineasPorInvestigador(investigadorId))
+        }
+
     override suspend fun addRelacion(relacion: InvestigadorLineaTrabajo) {
         investigadorLineaTrabajoDao.addRelacion(relacion)
     }
+
     override suspend fun deleteRelacion(relacion: InvestigadorLineaTrabajo) {
         investigadorLineaTrabajoDao.deleteRelacion(relacion)
 
@@ -263,9 +282,11 @@ class EstudianteRepositoryImple(private val estudianteDao: EstudiantesDao) : Est
     override fun getAllEstudianteById(investigadorId: Int): Flow<List<Estudiante?>> = flow {
         emit(estudianteDao.getAllEstudianteById(investigadorId))
     }
-    override  suspend fun addEstudiante(estudiante: Estudiante) {
+
+    override suspend fun addEstudiante(estudiante: Estudiante) {
         estudianteDao.addEstudiante(estudiante)
     }
+
     override suspend fun deleteEstudiante(estudiante: Estudiante) {
         estudianteDao.deleteEstudiante(estudiante)
 
@@ -282,17 +303,22 @@ class ProyectoRepositoryImple(private val proyectoDao: ProyectosDao) : Proyectos
     override fun getProyectoById(id: Int): Flow<Proyecto?> = flow {
         emit(proyectoDao.getProyectoById(id))
     }
+
     override suspend fun addProyecto(proyecto: Proyecto) {
         proyectoDao.addProyecto(proyecto)
     }
+
     override suspend fun updateProyecto(proyecto: Proyecto) {
         proyectoDao.updateProyecto(proyecto)
     }
+
     override suspend fun deleteProyecto(proyecto: Proyecto) {
         proyectoDao.deleteProyecto(proyecto)
     }
 }
-class HerramientaRepositoryImple(private val herramientaDao: HerramientaDao) : HerramientaRepository{
+
+class HerramientaRepositoryImple(private val herramientaDao: HerramientaDao) :
+    HerramientaRepository {
     override fun getAllHerramientas(): Flow<List<Herramienta>> =
         herramientaDao.getAllHerramientas()
 
@@ -303,6 +329,7 @@ class HerramientaRepositoryImple(private val herramientaDao: HerramientaDao) : H
     override suspend fun addHerramienta(herramienta: Herramienta) {
         herramientaDao.addHerramienta(herramienta)
     }
+
     override suspend fun deleteHerramienta(herramienta: Herramienta) {
         herramientaDao.deleteHerramienta(herramienta)
 
@@ -310,61 +337,79 @@ class HerramientaRepositoryImple(private val herramientaDao: HerramientaDao) : H
 
 }
 
-class ProyectoHerramientaRepositoryImple(private val proyectoHerramientaDao: ProyectoHerramientaDao) : ProyectoHerramientaRepository{
-    override fun getHerramientasPorProyecto(proyectoId: Int): Flow<List<ProyectoHerramienta>> = flow {
-        emit(proyectoHerramientaDao.getHerramientasPorProyecto(proyectoId))
-    }
+class ProyectoHerramientaRepositoryImple(private val proyectoHerramientaDao: ProyectoHerramientaDao) :
+    ProyectoHerramientaRepository {
+    override fun getHerramientasPorProyecto(proyectoId: Int): Flow<List<ProyectoHerramienta>> =
+        flow {
+            emit(proyectoHerramientaDao.getHerramientasPorProyecto(proyectoId))
+        }
+
     override suspend fun addRelacion(relacion: ProyectoHerramienta) {
         proyectoHerramientaDao.addRelacion(relacion)
     }
+
     override suspend fun deleteRelacion(relacion: ProyectoHerramienta) {
         proyectoHerramientaDao.deleteRelacion(relacion)
     }
 }
 
-class ProyectoInvestigadorRepositoryImple(private val proyectoInvestigadorDao: ProyectoInvestigadorDao) : ProyectoInvestigadorRepository{
-    override fun getInvestigadoresPorProyecto(proyectoId: Int): Flow<List<ProyectoInvestigador?>> = flow {
-        emit(proyectoInvestigadorDao.getInvestigadoresPorProyecto(proyectoId))
+class ProyectoInvestigadorRepositoryImple(private val proyectoInvestigadorDao: ProyectoInvestigadorDao) :
+    ProyectoInvestigadorRepository {
+    override fun getInvestigadoresPorProyecto(proyectoId: Int): Flow<List<ProyectoInvestigador?>> =
+        flow {
+            emit(proyectoInvestigadorDao.getInvestigadoresPorProyecto(proyectoId))
 
-    }
-    override fun getProyectoPorInvestigador(investigadorId: Int): Flow<List<ProyectoInvestigador?>> = flow {
-        emit(proyectoInvestigadorDao.getProyectoPorInvestigador(investigadorId))
-    }
+        }
+
+    override fun getProyectoPorInvestigador(investigadorId: Int): Flow<List<ProyectoInvestigador?>> =
+        flow {
+            emit(proyectoInvestigadorDao.getProyectoPorInvestigador(investigadorId))
+        }
+
     override suspend fun addRelacion(relacion: ProyectoInvestigador) {
         proyectoInvestigadorDao.addRelacion(relacion)
     }
+
     override suspend fun deleteRelacion(relacion: ProyectoInvestigador) {
         proyectoInvestigadorDao.deleteRelacion(relacion)
 
     }
 }
 
-class ArticuloRepositoryImple(private val articuloDao: ArticuloDao) : ArticuloRepository{
+class ArticuloRepositoryImple(private val articuloDao: ArticuloDao) : ArticuloRepository {
     override fun getAllArticulos(): Flow<List<Articulo>> =
         articuloDao.getAllArticulos()
 
     override fun getArticuloById(id: Int): Flow<Articulo?> = flow {
         emit(articuloDao.getArticuloById(id))
     }
+
     override suspend fun addArticulo(articulo: Articulo) {
         articuloDao.addArticulo(articulo)
     }
+
     override suspend fun updateArticulo(articulo: Articulo) {
         articuloDao.updateArticulo(articulo)
     }
+
     override suspend fun deleteArticulo(articulo: Articulo) {
         articuloDao.deleteArticulo(articulo)
 
     }
 }
 
-class ArticuloInvestigadorRepositoryImple(private val articuloInvestigadorDao: ArticuloInvestigadorDao) : ArticuloInvestigadorRepository{
-    override fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> = flow {
-        emit(articuloInvestigadorDao.getInvestigadoresPorArticulo(articuloId))
-    }
-    override  fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador>> = flow {
-        emit(articuloInvestigadorDao.getArticuloPorInvestigador(investigadorId))
-    }
+class ArticuloInvestigadorRepositoryImple(private val articuloInvestigadorDao: ArticuloInvestigadorDao) :
+    ArticuloInvestigadorRepository {
+    override fun getInvestigadoresPorArticulo(articuloId: Int): Flow<List<ArticuloInvestigador>> =
+        flow {
+            emit(articuloInvestigadorDao.getInvestigadoresPorArticulo(articuloId))
+        }
+
+    override fun getArticuloPorInvestigador(investigadorId: Int): Flow<List<ArticuloInvestigador>> =
+        flow {
+            emit(articuloInvestigadorDao.getArticuloPorInvestigador(investigadorId))
+        }
+
     override suspend fun addRelacion(relacion: ArticuloInvestigador) {
         articuloInvestigadorDao.addRelacion(relacion)
     }
@@ -374,21 +419,25 @@ class ArticuloInvestigadorRepositoryImple(private val articuloInvestigadorDao: A
     }
 }
 
-class EventosRepositoryImple(private val eventosDao: EventosDao) : EventosRepository{
+class EventosRepositoryImple(private val eventosDao: EventosDao) : EventosRepository {
     override fun getAllEventos(): Flow<List<Evento>> = eventosDao.getAllEventos()
 
     override fun getEventoById(id: Int): Flow<Evento?> = flow {
         emit(eventosDao.getEventoById(id))
     }
+
     override fun getEventoByInvestigador(investigadorId: Int): Flow<List<Evento?>> = flow {
         emit(eventosDao.getEventoByInvestigador(investigadorId))
     }
+
     override suspend fun addEvento(evento: Evento) {
         eventosDao.addEvento(evento)
     }
+
     override suspend fun updateEvento(evento: Evento) {
         eventosDao.updateEvento(evento)
-        }
+    }
+
     override suspend fun deleteEvento(evento: Evento) {
         eventosDao.deleteEvento(evento)
     }

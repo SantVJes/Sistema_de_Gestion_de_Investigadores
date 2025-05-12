@@ -16,10 +16,13 @@ interface UsuariosDao {
     //verificar si existe el usuario
     @Query("SELECT * FROM Usuario WHERE username = :username AND password = :password")
     suspend fun login(username: String, password: String): Usuario?
+
     @Insert
     suspend fun addUsuario(usuario: Usuario)
+
     @Update
     suspend fun updateUsuario(usuario: Usuario)
+
     @Delete
     suspend fun deleteUsuario(usuario: Usuario)
 }
@@ -53,17 +56,22 @@ interface InvestigadoresDao {
 areaTrabajoDao proporciona acceso a la tabla de areas de trabajo en la base de datos
  */
 @Dao
-interface AreasTrabajoDao{
+interface AreasTrabajoDao {
     @Query("SELECT * FROM AreaTrabajo")
     fun getAllAreasTrabajo(): Flow<List<AreaTrabajo>>
+
     @Query("SELECT * FROM AreaTrabajo WHERE id = :id")
     suspend fun getAreaTrabajoById(id: Int): AreaTrabajo?
+
     @Query("SELECT * FROM AreaTrabajo WHERE nombre = :nombre")
     suspend fun getAreaTrabajoByNombre(nombre: String): AreaTrabajo?
+
     @Insert
     suspend fun addAreaTrabajo(areaTrabajo: AreaTrabajo)
+
     @Update
     suspend fun updateAreaTrabajo(areaTrabajo: AreaTrabajo)
+
     @Delete
     suspend fun deleteAreaTrabajo(areaTrabajo: AreaTrabajo)
 }
@@ -72,15 +80,19 @@ interface AreasTrabajoDao{
 lineaTrabajoDao proporciona acceso a la tabla de lineas de trabajo en la base de datos
  */
 @Dao
-interface LineasTrabajoDao{
+interface LineasTrabajoDao {
     @Query("SELECT * FROM LineaTrabajo")
     fun getAllLineasTrabajo(): Flow<List<LineaTrabajo>>
+
     @Query("SELECT * FROM LineaTrabajo WHERE id = :id")
     suspend fun getLineaTrabajoById(id: Int): LineaTrabajo?
+
     @Insert
     suspend fun addLineaTrabajo(lineaTrabajo: LineaTrabajo)
+
     @Update
     suspend fun updateLineaTrabajo(lineaTrabajo: LineaTrabajo)
+
     @Delete
     suspend fun deleteLineaTrabajo(lineaTrabajo: LineaTrabajo)
 }
@@ -90,7 +102,7 @@ investigadorLineaTrabajoDao proporciona acceso a la tabla intermedia de investig
 
  */
 @Dao
-interface InvestigadorLineaTrabajoDao{
+interface InvestigadorLineaTrabajoDao {
     @Query("SELECT * FROM InvestigadorLineaTrabajo WHERE investigadorId = :investigadorId")
     suspend fun getLineasPorInvestigador(investigadorId: Int): List<InvestigadorLineaTrabajo>
 
@@ -100,12 +112,13 @@ interface InvestigadorLineaTrabajoDao{
     @Delete
     suspend fun deleteRelacion(relacion: InvestigadorLineaTrabajo)
 }
+
 /*
 estudianteDao proporciona acceso a la tabla de estudiantes en la base de datos
 
  */
 @Dao
-interface EstudiantesDao{
+interface EstudiantesDao {
     @Query("SELECT * FROM Estudiante")
     fun getAllEstudiantes(): Flow<List<Estudiante>>
 
@@ -124,31 +137,38 @@ interface EstudiantesDao{
 proyectoDao proporciona acceso a la tabla de proyectos en la base de datos
  */
 @Dao
-interface ProyectosDao{
+interface ProyectosDao {
     @Query("SELECT * FROM Proyecto")
-     fun getAllProyectos(): Flow<List<Proyecto>>
+    fun getAllProyectos(): Flow<List<Proyecto>>
 
     @Query("SELECT * FROM Proyecto WHERE id = :id")
     suspend fun getProyectoById(id: Int): Proyecto?
+
     @Insert
     suspend fun addProyecto(proyecto: Proyecto)
+
     @Update
     suspend fun updateProyecto(proyecto: Proyecto)
+
     @Delete
     suspend fun deleteProyecto(proyecto: Proyecto)
 
 }
+
 /*
 herramientaDao proporciona acceso a la tabla de herramientas en la base de datos
  */
 @Dao
-interface HerramientaDao{
+interface HerramientaDao {
     @Query("SELECT * FROM Herramienta")
     fun getAllHerramientas(): Flow<List<Herramienta>>
+
     @Query("SELECT * FROM Herramienta WHERE id = :id")
     suspend fun getHerramientaById(id: Int): Herramienta?
+
     @Insert
     suspend fun addHerramienta(herramienta: Herramienta)
+
     @Delete
     suspend fun deleteHerramienta(herramienta: Herramienta)
 }
@@ -157,26 +177,32 @@ interface HerramientaDao{
 proyectoHerramientaDao proporciona acceso a la tabla intermedia de proyectos y herramientas en la base de datos
  */
 @Dao
-interface ProyectoHerramientaDao{
+interface ProyectoHerramientaDao {
     @Query("SELECT * FROM ProyectoHerramienta WHERE proyectoId = :proyectoId")
     suspend fun getHerramientasPorProyecto(proyectoId: Int): List<ProyectoHerramienta>
+
     @Insert
     suspend fun addRelacion(relacion: ProyectoHerramienta)
+
     @Delete
     suspend fun deleteRelacion(relacion: ProyectoHerramienta)
 }
+
 /*
 proyectoInvestigadorDao proporciona acceso a la tabla intermedia de proyectos y investigadores en la base de datos
 
  */
 @Dao
-interface ProyectoInvestigadorDao{
+interface ProyectoInvestigadorDao {
     @Query("SELECT * FROM ProyectoInvestigador WHERE proyectoId = :proyectoId")
     suspend fun getInvestigadoresPorProyecto(proyectoId: Int): List<ProyectoInvestigador?>
+
     @Query("SELECT * FROM ProyectoInvestigador WHERE investigadorId = :investigadorId")
     suspend fun getProyectoPorInvestigador(investigadorId: Int): List<ProyectoInvestigador?>
+
     @Insert
     suspend fun addRelacion(relacion: ProyectoInvestigador)
+
     @Delete
     suspend fun deleteRelacion(relacion: ProyectoInvestigador)
 
@@ -186,29 +212,31 @@ interface ProyectoInvestigadorDao{
 articuloDao proporciona acceso a la tabla de articulos en la base de datos
  */
 @Dao
-interface ArticuloDao{
+interface ArticuloDao {
     @Query("SELECT * FROM Articulo")
-     fun getAllArticulos(): Flow<List<Articulo>>
+    fun getAllArticulos(): Flow<List<Articulo>>
+
     @Query("SELECT * FROM Articulo WHERE id = :id")
     suspend fun getArticuloById(id: Int): Articulo?
 
     @Insert
-    suspend fun addArticulo(articulo:Articulo)
+    suspend fun addArticulo(articulo: Articulo)
 
     @Update
-    suspend fun updateArticulo(articulo:Articulo)
+    suspend fun updateArticulo(articulo: Articulo)
 
     @Delete
-    suspend fun deleteArticulo(articulo:Articulo)
+    suspend fun deleteArticulo(articulo: Articulo)
 
 
 }
+
 /*
 articuloInvestigadorDao proporciona acceso a la tabla intermedia de articulos y investigadores en la base de datos
 
  */
 @Dao
-interface  ArticuloInvestigadorDao{
+interface ArticuloInvestigadorDao {
     @Query("SELECT * FROM ArticuloInvestigador WHERE articuloId = :articuloId")
     suspend fun getInvestigadoresPorArticulo(articuloId: Int): List<ArticuloInvestigador>
 
@@ -228,11 +256,13 @@ eventoDao proporciona acceso a la tabla de eventos en la base de datos
  */
 
 @Dao
-interface EventosDao{
+interface EventosDao {
     @Query("SELECT * FROM Evento")
-     fun getAllEventos(): Flow<List<Evento>>
+    fun getAllEventos(): Flow<List<Evento>>
+
     @Query("SELECT * FROM Evento WHERE id = :id")
     suspend fun getEventoById(id: Int): Evento?
+
     @Query("SELECT * FROM Evento WHERE investigadorId = :investigadorId")
     suspend fun getEventoByInvestigador(investigadorId: Int): List<Evento?>
 
