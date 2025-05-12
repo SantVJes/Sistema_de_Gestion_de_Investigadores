@@ -119,10 +119,10 @@ data class ArticuloInvestigador(
 @Entity
 data class Evento(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val nombre: String,
-    val lugar: String,
-    val fecha: String,
-    val duracion: String,
-    val empresaInvita: String,
-    val investigadorId: Int
+    var nombre: String,
+    var lugar: String,
+    var fecha: String,
+    var duracion: String,
+    var empresaInvita: String,
+    var investigadorId: Int
 )

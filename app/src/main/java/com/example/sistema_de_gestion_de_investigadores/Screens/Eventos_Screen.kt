@@ -16,26 +16,42 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
@@ -48,8 +64,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -234,40 +252,16 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                             )
                         }
                     }
-                    val timePickerDialog = TimePickerDialog(
-                        context,
-                        { _, hour: Int, minute: Int ->
-                            duracion = String.format("%02d:%02d", hour, minute)
-                        },
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        true // formato 24h
+
+
+
+
+                    OutlinedTextField(
+                        value = duracion,
+                        onValueChange = { duracion = it },
+                        label = { Text("Duración del evento") },
+                        modifier = Modifier.fillMaxWidth()
                     )
-
-
-
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { timePickerDialog.show() }
-                            .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
-                            .padding(8.dp) // Espaciado interno para parecerse a un TextField
-                    ) {
-                        Column {
-                            Text(
-                                text = "Duración del evento",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = Color.Gray
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = if (duracion.isNotEmpty()) duracion else "Selecciona una hora",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = if (duracion.isNotEmpty()) Color.Black else Color.LightGray
-                            )
-                        }
-                    }
 
                     OutlinedTextField(
                         value = empresa,
@@ -333,8 +327,28 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                                     )
                                     eventosViewModel.incertEvento(eventoNew)
                                     //incertar relacion
+                                    ver_fomr = false
+                                    nombre = ""
+                                    fechaevento = ""
+                                    lugar = ""
+                                    duracion = ""
 
                                 } else {
+                                    evento_eli?.nombre = nombre
+                                    evento_eli?.fecha = fechaevento
+                                    evento_eli?.lugar = lugar
+                                    evento_eli?.duracion = duracion
+                                    evento_eli?.empresaInvita = empresa
+                                    evento_eli?.investigadorId = id_investigador!!
+
+                                    eventosViewModel.updateEvento(evento_eli!!)
+                                    ver_fomr = false
+                                    nombre = ""
+                                    fechaevento = ""
+                                    lugar = ""
+                                    duracion = ""
+                                    empresa = ""
+                                    id_investigador = null
 
 
 
@@ -368,9 +382,143 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                 }
             }
 
+
+            LazyColumn (
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            {
+                items(allEventos) { evento ->
+
+
+                    val nombre_investigador by investigadoresViewModel.getInvestigadorById(evento.investigadorId).collectAsState(null)
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 12.dp),
+                        shape = RoundedCornerShape(20.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(modifier = Modifier.padding(20.dp)) {
+                            // Título del evento
+                            Text(
+                                text = evento.nombre,
+                                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                                color = Color(0xFF1A237E) // Azul oscuro
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // Información detallada con iconos sutiles
+                            InfoRow(icon = Icons.Default.DateRange, label = evento.fecha)
+                            InfoRow(icon = Icons.Default.Place, label = evento.lugar)
+                            InfoRow(icon = Icons.Default.Info, label = evento.duracion)
+                            InfoRow(icon = Icons.Default.Home, label = evento.empresaInvita)
+                            InfoRow(icon = Icons.Default.Person, label = nombre_investigador?.nombre ?: "Fue despedido")
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Botones de acción
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                TextButton(
+                                    onClick = {
+                                        eventosViewModel.updateEvento(evento)
+                                        ver_fomr = true
+                                        edit = true
+                                        evento_eli =evento
+                                        nombre = evento.nombre
+                                        fechaevento = evento.fecha
+                                        lugar = evento.lugar
+                                        duracion = evento.duracion
+                                        empresa = evento.empresaInvita
+                                        id_investigador = evento.investigadorId
+                                        nom_investigador = nombre_investigador?.nombre ?: "Fue despedido"
+
+
+
+
+
+                                    },
+                                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF1976D2))
+                                ) {
+                                    Icon(Icons.Default.Edit, contentDescription = "Editar")
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Editar")
+                                }
+
+                                TextButton(
+                                    onClick = { eventosViewModel.deleteEvento(evento) },
+                                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFFD32F2F))
+                                ) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Eliminar")
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("Eliminar")
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+
+                }
+
+
+            }
+
+
+
+        }
+        // Botón para añadir un investigador
+        FloatingActionButton(
+            onClick = {
+                ver_fomr = true
+                edit = false
+                nombre = ""
+                fechaevento = ""
+                lugar = ""
+                duracion = ""
+                empresa = ""
+                id_investigador = null
+
+
+            },
+            containerColor = Color(0xFF00BCD4),
+            contentColor = Color.White,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(1.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Añadir Investigador")
         }
     }
+
     
+}
+@Composable
+fun InfoRow(icon: ImageVector, label: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.Gray,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.DarkGray
+        )
+    }
 }
 
 
