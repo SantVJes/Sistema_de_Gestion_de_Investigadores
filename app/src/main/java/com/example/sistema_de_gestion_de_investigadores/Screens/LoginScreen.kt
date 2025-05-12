@@ -40,7 +40,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun login_user(navController: NavController, appContainer: App_Container) {
-    Scaffold() { it
+    Scaffold {
+        it
 
         Body_login(navController, appContainer)
     }
@@ -54,7 +55,7 @@ fun Body_login(navController: NavController, appContainer: App_Container) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val basedata = App_Container(context)
-    val  userViewModel = userViewModel(basedata.provideUsuarioRepository())
+    val userViewModel = userViewModel(basedata.provideUsuarioRepository())
 
     Column(
         modifier = Modifier
@@ -84,8 +85,7 @@ fun Body_login(navController: NavController, appContainer: App_Container) {
             value = email,
             onValueChange = { email = it },
             label = { Text("Correo electrónico") },
-            modifier = Modifier.
-            fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -112,7 +112,8 @@ fun Body_login(navController: NavController, appContainer: App_Container) {
                             navController.navigate(Directorio.HomeScreen)
 
                         } else {
-                            Toast.makeText(context, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Credenciales inválidas", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 }

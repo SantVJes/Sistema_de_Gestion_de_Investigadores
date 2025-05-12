@@ -3,7 +3,6 @@
 package com.example.sistema_de_gestion_de_investigadores.Screens
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +45,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -75,14 +73,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.Evento
-import com.example.sistema_de_gestion_de_investigadores.Data_Base.LineaTrabajo
 import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.eventosViewModel
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.investigadorViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.time.Duration
 
 @Composable
 fun Eventos_Screen(navController: NavController, appContainer: App_Container) {
@@ -156,7 +152,7 @@ fun Eventos_Screen(navController: NavController, appContainer: App_Container) {
             Body_eventos(navController, appContainer)
         }
     }
-    
+
 }
 
 @Composable
@@ -173,7 +169,6 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
     //variables a utilizar
     var ver_fomr by remember { mutableStateOf(false) }
     var nombre by remember { mutableStateOf("") }
-    var id by remember { mutableStateOf("") }
     var fechaevento by remember { mutableStateOf("") }
     var nom_investigador by remember { mutableStateOf("") }
     var id_investigador by remember { mutableStateOf<Int?>(null) }
@@ -182,7 +177,6 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
     var duracion by remember { mutableStateOf("") }
     var empresa by remember { mutableStateOf("") }
     var edit by remember { mutableStateOf(false) }
-    var expand5 by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val calendar = remember { Calendar.getInstance() }
     val dateFormatter = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
@@ -351,10 +345,6 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                                     id_investigador = null
 
 
-
-
-
-
                                 }
                             },
                             modifier = Modifier
@@ -378,12 +368,11 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                     }
 
 
-
                 }
             }
 
 
-            LazyColumn (
+            LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -391,7 +380,8 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                 items(allEventos) { evento ->
 
 
-                    val nombre_investigador by investigadoresViewModel.getInvestigadorById(evento.investigadorId).collectAsState(null)
+                    val nombre_investigador by investigadoresViewModel.getInvestigadorById(evento.investigadorId)
+                        .collectAsState(null)
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -415,7 +405,10 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                             InfoRow(icon = Icons.Default.Place, label = evento.lugar)
                             InfoRow(icon = Icons.Default.Info, label = evento.duracion)
                             InfoRow(icon = Icons.Default.Home, label = evento.empresaInvita)
-                            InfoRow(icon = Icons.Default.Person, label = nombre_investigador?.nombre ?: "Fue despedido")
+                            InfoRow(
+                                icon = Icons.Default.Person,
+                                label = nombre_investigador?.nombre ?: "Fue despedido"
+                            )
 
                             Spacer(modifier = Modifier.height(16.dp))
 
@@ -429,21 +422,23 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                                         eventosViewModel.updateEvento(evento)
                                         ver_fomr = true
                                         edit = true
-                                        evento_eli =evento
+                                        evento_eli = evento
                                         nombre = evento.nombre
                                         fechaevento = evento.fecha
                                         lugar = evento.lugar
                                         duracion = evento.duracion
                                         empresa = evento.empresaInvita
                                         id_investigador = evento.investigadorId
-                                        nom_investigador = nombre_investigador?.nombre ?: "Fue despedido"
-
-
-
+                                        nom_investigador =
+                                            nombre_investigador?.nombre ?: "Fue despedido"
 
 
                                     },
-                                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF1976D2))
+                                    colors = ButtonDefaults.textButtonColors(
+                                        contentColor = Color(
+                                            0xFF1976D2
+                                        )
+                                    )
                                 ) {
                                     Icon(Icons.Default.Edit, contentDescription = "Editar")
                                     Spacer(modifier = Modifier.width(4.dp))
@@ -452,7 +447,11 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
 
                                 TextButton(
                                     onClick = { eventosViewModel.deleteEvento(evento) },
-                                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFFD32F2F))
+                                    colors = ButtonDefaults.textButtonColors(
+                                        contentColor = Color(
+                                            0xFFD32F2F
+                                        )
+                                    )
                                 ) {
                                     Icon(Icons.Default.Delete, contentDescription = "Eliminar")
                                     Spacer(modifier = Modifier.width(4.dp))
@@ -463,14 +462,10 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
                     }
 
 
-
-
-
                 }
 
 
             }
-
 
 
         }
@@ -498,8 +493,9 @@ fun Body_eventos(navController: NavController, appContainer: App_Container) {
         }
     }
 
-    
+
 }
+
 @Composable
 fun InfoRow(icon: ImageVector, label: String) {
     Row(
@@ -525,5 +521,8 @@ fun InfoRow(icon: ImageVector, label: String) {
 @Preview(showBackground = true)
 @Composable
 fun Greeting_eventos() {
-    Eventos_Screen(navController = NavController(LocalContext.current), appContainer = App_Container(LocalContext.current))
+    Eventos_Screen(
+        navController = NavController(LocalContext.current),
+        appContainer = App_Container(LocalContext.current)
+    )
 }

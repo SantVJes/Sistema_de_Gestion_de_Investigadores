@@ -18,22 +18,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -173,7 +172,8 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
     var investigadorId: Int? by remember { mutableStateOf<Int?>(null) }
     var nombreinvestigador by remember { mutableStateOf("") }
     var edit by remember { mutableStateOf(false) }
-    val listTipo = listOf("Practicante", "Servicio Social","Maestría", "Doctorado", "Especialización")
+    val listTipo =
+        listOf("Practicante", "Servicio Social", "Maestría", "Doctorado", "Especialización")
     var expanded by remember { mutableStateOf(false) }
     var expanded1 by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -390,7 +390,6 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
 
 
                             } else {
-
                                 estudianteViewModel.deleteEstudiante(estu_eli!!)
 
                                 estu_eli = Estudiante(
@@ -405,11 +404,6 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
 
                                 )
                                 estudianteViewModel.incertEstudiante(estu_eli!!)
-
-
-
-
-
                                 nombre = ""
                                 edit = false
                                 id = ""
@@ -419,8 +413,6 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
                                 escuela = ""
                                 fechaInicio = ""
                                 fechaFin = ""
-
-
                             }
                         },
                         modifier = Modifier
@@ -436,16 +428,12 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
                         onClick = {
                             edit = false
                             nombre = ""
-
                             nombreinvestigador = ""
                             fechaInicio = ""
                             fechaFin = ""
                             tipo = ""
                             carrera = ""
                             escuela = ""
-
-
-
                             ver_fomr = false
                         }
                     ) {
@@ -453,9 +441,6 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
                     }
                 }
             }
-
-
-
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -631,7 +616,6 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
         }
 
 
-
     }
 
 
@@ -642,5 +626,8 @@ fun Body_estudiantes(navController: NavController, appContainer: App_Container) 
 @Composable
 fun Estudiantes_ScreenPreview() {
 
-    Estudiantes_Screen(navController = NavController(LocalContext.current), appContainer = App_Container(LocalContext.current))
+    Estudiantes_Screen(
+        navController = NavController(LocalContext.current),
+        appContainer = App_Container(LocalContext.current)
+    )
 }

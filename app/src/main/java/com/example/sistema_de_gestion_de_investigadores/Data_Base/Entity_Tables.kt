@@ -1,9 +1,7 @@
 package com.example.sistema_de_gestion_de_investigadores.Data_Base
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-
 
 
 //Tabla Usuarios
@@ -23,7 +21,7 @@ data class Investigador(
     val carrera: String,
     val nivelSNII: String?, // "Candidato", "Nivel I", "Nivel II", "Nivel III"
     val fechaSNII: String?, // formato ISO yyyy-MM-dd
-    val areaId: Int
+    val areaId: Int,
 )
 
 //Tablas Areas de Trabajo
@@ -39,14 +37,14 @@ data class AreaTrabajo(
 @Entity
 data class LineaTrabajo(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    var nombre: String // Robótica, IA, Electrónica, etc.
+    var nombre: String, // Robótica, IA, Electrónica, etc.
 )
 
 //Tabla de relación entre investigadores y líneas de trabajo (many-to-many)
 @Entity(primaryKeys = ["investigadorId", "lineaTrabajoId"])
 data class InvestigadorLineaTrabajo(
     val investigadorId: Int,
-    val lineaTrabajoId: Int
+    val lineaTrabajoId: Int,
 )
 
 //tabla estudiantes de los investigadores
@@ -59,7 +57,7 @@ data class Estudiante(
     val escuela: String,
     val fechaInicio: String,
     val fechaFin: String,
-    val investigadorId: Int
+    val investigadorId: Int,
 )
 
 //Tabla de proyectos
@@ -68,7 +66,7 @@ data class Proyecto(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val nombre: String,
     val fechaInicio: String,
-    val fechaFin: String
+    val fechaFin: String,
 )
 
 //tabla de Herramientas de investigacion
@@ -76,14 +74,14 @@ data class Proyecto(
 data class Herramienta(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val nombre: String,
-    val tipo: String // Catalogado (software, hardware, etc.)
+    val tipo: String, // Catalogado (software, hardware, etc.)
 )
 
 //Tabla de relación entre proyectos y herramientas (many-to-many)
 @Entity(primaryKeys = ["proyectoId", "herramientaId"])
 data class ProyectoHerramienta(
     val proyectoId: Int,
-    val herramientaId: Int
+    val herramientaId: Int,
 )
 
 //Tabla de relación entre investigadores y proyectos (many-to-many)
@@ -91,7 +89,7 @@ data class ProyectoHerramienta(
 data class ProyectoInvestigador(
     val proyectoId: Int,
     val investigadorId: Int,
-    val esPrincipal : Boolean // true si es el primer investigador registrado
+    val esPrincipal: Boolean, // true si es el primer investigador registrado
 )
 
 //Tabla articulos publicados
@@ -104,7 +102,7 @@ data class Articulo(
     var anio: Int,
     var fechaPublicacion: String,
     var doi: String,
-    var url: String
+    var url: String,
 )
 
 //Tabla de relación entre investigadores y artículos (many-to-many)
@@ -112,7 +110,7 @@ data class Articulo(
 data class ArticuloInvestigador(
     val articuloId: Int,
     val investigadorId: Int,
-    val esPrincipal: Boolean
+    val esPrincipal: Boolean,
 )
 
 //tabla eventos
@@ -124,5 +122,5 @@ data class Evento(
     var fecha: String,
     var duracion: String,
     var empresaInvita: String,
-    var investigadorId: Int
+    var investigadorId: Int,
 )

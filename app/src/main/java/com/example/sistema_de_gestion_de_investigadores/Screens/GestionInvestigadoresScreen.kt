@@ -140,7 +140,10 @@ fun Investigadores_Screen(navController: NavController, appContainer: App_Contai
 
 
             ) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "retron")
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "retron"
+                )
             }
 
         },
@@ -193,9 +196,6 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
     var nivelSNII by remember { mutableStateOf<String?>(null) }
     var fechaSNII by remember { mutableStateOf("") }
     var mostrarFormulario by remember { mutableStateOf(false) }
-    var adirlinia by remember { mutableStateOf(false) }
-    var linia_trabajo by remember { mutableStateOf("") }
-    var linia_Id by remember { mutableStateOf("") }
     var expanded1 by remember { mutableStateOf(false) }
     var areaSeleccionadaNombre by remember { mutableStateOf<String?>(null) }
     var expanded by remember { mutableStateOf(false) }
@@ -210,7 +210,6 @@ fun Body_investigadores(navController: NavController, appContainer: App_Containe
     var expand4 by remember { mutableStateOf(false) }
     val articulosSeleccionados = remember { mutableStateListOf<String>() }
     val articulos_id = remember { mutableStateListOf<String>() }
-    var expand5 by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val calendar = remember { Calendar.getInstance() }
     val dateFormatter = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }

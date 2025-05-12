@@ -11,6 +11,4 @@ object Directorio {
     val articulos_screen = "Articulos_Screen"
     val estudiantes_screen = "Estudiantes_Screen"
     val eventos_screen = "Eventos_Screen"
-
-
 }

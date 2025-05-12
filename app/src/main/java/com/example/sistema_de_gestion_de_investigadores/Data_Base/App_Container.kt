@@ -13,7 +13,7 @@ import android.content.Context
     }
 
 }*/
-class App_Container (context: Context){
+class App_Container(context: Context) {
     private val getDatabase = InvestigadoresDatabase.getDatabase(context)
     private val getUsuariosDao = getDatabase.UsuarioDao()
     private val getInvestigadoresDao = getDatabase.investigadoresDao()
@@ -32,52 +32,68 @@ class App_Container (context: Context){
     private val getInvestigadorRepository = InvestigadorRepositoryImple(getInvestigadoresDao)
     private val getAreaTrabajoRepository = AreaTrabajoRepositoryImple(getAreasTrabajoDao)
     private val getLineaTrabajoRepository = LiniasTrabajoRepositoryImple(getLineasTrabajoDao)
-    private val getInvestigadorLineaTrabajoRepository = InvestigadorLineaTrabajoRepositoryImple(getInvestigadorLineaTrabajoDao)
+    private val getInvestigadorLineaTrabajoRepository =
+        InvestigadorLineaTrabajoRepositoryImple(getInvestigadorLineaTrabajoDao)
     private val getEstudianteRepository = EstudianteRepositoryImple(getEstudiantesDao)
     private val getProyectoRepository = ProyectoRepositoryImple(getProyectosDao)
     private val getHerramientaRepository = HerramientaRepositoryImple(getHerramientasDao)
-    private val getProyectoHerramientaRepository = ProyectoHerramientaRepositoryImple(getProyectoHerramientaDao)
-    private val getProyectoInvestigadorRepository = ProyectoInvestigadorRepositoryImple(getProyectoInvestigadorDao)
+    private val getProyectoHerramientaRepository =
+        ProyectoHerramientaRepositoryImple(getProyectoHerramientaDao)
+    private val getProyectoInvestigadorRepository =
+        ProyectoInvestigadorRepositoryImple(getProyectoInvestigadorDao)
     private val getArticuloRepository = ArticuloRepositoryImple(getArticulosDao)
-    private val getArticuloInvestigadorRepository = ArticuloInvestigadorRepositoryImple(getArticuloInvestigadorDao)
+    private val getArticuloInvestigadorRepository =
+        ArticuloInvestigadorRepositoryImple(getArticuloInvestigadorDao)
     private val getEventoRepository = EventosRepositoryImple(getEventosDao)
 
     fun provideUsuarioRepository(): UsuariosRepository {
         return getUsuarioRepository
     }
+
     fun provideInvestigadorRepository(): InvestigadoresRepository {
         return getInvestigadorRepository
     }
+
     fun provideAreaTrabajoRepository(): AreasTrabajoRepository {
         return getAreaTrabajoRepository
     }
+
     fun provideLineaTrabajoRepository(): LineasTrabajoRepository {
         return getLineaTrabajoRepository
     }
+
     fun provideInvestigadorLineaTrabajoRepository(): InvestigadorLineaTrabajoRepository {
         return getInvestigadorLineaTrabajoRepository
     }
+
     fun provideEstudianteRepository(): EstudiantesRepository {
         return getEstudianteRepository
     }
+
     fun provideProyectoRepository(): ProyectosRepository {
         return getProyectoRepository
     }
+
     fun provideHerramientaRepository(): HerramientaRepository {
         return getHerramientaRepository
     }
+
     fun provideProyectoHerramientaRepository(): ProyectoHerramientaRepository {
         return getProyectoHerramientaRepository
     }
+
     fun provideProyectoInvestigadorRepository(): ProyectoInvestigadorRepository {
         return getProyectoInvestigadorRepository
     }
+
     fun provideArticuloRepository(): ArticuloRepository {
         return getArticuloRepository
     }
+
     fun provideArticuloInvestigadorRepository(): ArticuloInvestigadorRepository {
         return getArticuloInvestigadorRepository
     }
+
     fun provideEventoRepository(): EventosRepository {
         return getEventoRepository
     }

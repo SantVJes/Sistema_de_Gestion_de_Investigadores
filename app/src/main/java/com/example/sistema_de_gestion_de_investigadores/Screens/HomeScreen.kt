@@ -28,13 +28,10 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -53,7 +50,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
-import java.nio.file.WatchEvent
 
 @Composable
 fun Home_screen(navController: NavController, appContainer: App_Container) {
@@ -115,8 +111,8 @@ fun Body_home(navController: NavController, appContainer: App_Container) {
         Triple("Líneas de trabajo", Directorio.lineas_trabajo, Icons.Default.Info),
         Triple("Artículos", Directorio.articulos_screen, Icons.Default.Email),
         Triple("Áreas de trabajo", Directorio.areas_screen, Icons.Default.Place),
-        Triple("Estudiantes ",Directorio.estudiantes_screen, Icons.Default.AccountCircle),
-        Triple("Eventos ",Directorio.eventos_screen, Icons.Default.Star)
+        Triple("Estudiantes ", Directorio.estudiantes_screen, Icons.Default.AccountCircle),
+        Triple("Eventos ", Directorio.eventos_screen, Icons.Default.Star)
     )
 
     LazyVerticalGrid(
@@ -168,11 +164,11 @@ fun Body_home(navController: NavController, appContainer: App_Container) {
 }
 
 
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun Greeting_home() {
-    Home_screen(navController = NavController(LocalContext.current), appContainer = App_Container(LocalContext.current))
+    Home_screen(
+        navController = NavController(LocalContext.current),
+        appContainer = App_Container(LocalContext.current)
+    )
 }

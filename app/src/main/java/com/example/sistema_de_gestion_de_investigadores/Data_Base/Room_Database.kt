@@ -10,7 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-@Database(entities = [Usuario::class,Investigador::class,AreaTrabajo::class,LineaTrabajo::class,InvestigadorLineaTrabajo::class,Estudiante::class,Proyecto::class,Herramienta::class,ProyectoHerramienta::class,ProyectoInvestigador::class,Articulo::class,ArticuloInvestigador::class,Evento::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Usuario::class, Investigador::class, AreaTrabajo::class, LineaTrabajo::class, InvestigadorLineaTrabajo::class, Estudiante::class, Proyecto::class, Herramienta::class, ProyectoHerramienta::class, ProyectoInvestigador::class, Articulo::class, ArticuloInvestigador::class, Evento::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class InvestigadoresDatabase : RoomDatabase() {
     abstract fun UsuarioDao(): UsuariosDao
     abstract fun investigadoresDao(): InvestigadoresDao
@@ -26,7 +30,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
     abstract fun articuloInvestigadorDao(): ArticuloInvestigadorDao
     abstract fun eventosDao(): EventosDao
 
-    companion object{
+    companion object {
         @Volatile
         private var instance: InvestigadoresDatabase? = null
         fun getDatabase(context: Context): InvestigadoresDatabase {
@@ -43,7 +47,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
         }
     }
 
-    private class DatabaseCallback : RoomDatabase.Callback() {
+    private class DatabaseCallback : Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             CoroutineScope(Dispatchers.IO).launch {
@@ -57,7 +61,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                 )
                 //Areas de trabajo
                 val daoArea = instance?.areasTrabajoDao()
-                val area1 = daoArea?.addAreaTrabajo(
+                daoArea?.addAreaTrabajo(
                     AreaTrabajo(
                         id = 1,
                         nombre = "Ingeniería de Software",
@@ -65,7 +69,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         lugar = "Ciudad Mazatlan"
                     )
                 )
-                val area2 = daoArea?.addAreaTrabajo(
+                daoArea?.addAreaTrabajo(
                     AreaTrabajo(
                         id = 2,
                         nombre = "Inteligencia Artificial",
@@ -73,7 +77,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         lugar = "Unidad 1 "
                     )
                 )
-                val area3 = daoArea?.addAreaTrabajo(
+                daoArea?.addAreaTrabajo(
                     AreaTrabajo(
                         id = 3,
                         nombre = "Robotica",
@@ -83,44 +87,44 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                 )
                 //Lineas de trabajo
                 val daoLinea = instance?.lineasTrabajoDao()
-                val linia1 = daoLinea?.addLineaTrabajo(
+                daoLinea?.addLineaTrabajo(
                     LineaTrabajo(
                         id = 1,
                         nombre = "Desarrollo de Software"
                     )
                 )
-                val linia2 = daoLinea?.addLineaTrabajo(
+                daoLinea?.addLineaTrabajo(
                     LineaTrabajo(
                         id = 2,
                         nombre = "Robotica"
                     )
                 )
-                val linia3 = daoLinea?.addLineaTrabajo(
+                daoLinea?.addLineaTrabajo(
                     LineaTrabajo(
                         id = 3,
                         nombre = "IA"
                     )
                 )
-                val linia4 = daoLinea?.addLineaTrabajo(
-                 LineaTrabajo(
-                     id = 4,
-                       nombre = "Electronica"
+                daoLinea?.addLineaTrabajo(
+                    LineaTrabajo(
+                        id = 4,
+                        nombre = "Electronica"
 
-                        )
-                 )
-                val linia5 = daoLinea?.addLineaTrabajo(
+                    )
+                )
+                daoLinea?.addLineaTrabajo(
                     LineaTrabajo(
                         id = 5,
                         nombre = "Alimentos"
                     )
                 )
-                val linia6 = daoLinea?.addLineaTrabajo(
+                daoLinea?.addLineaTrabajo(
                     LineaTrabajo(
                         id = 6,
                         nombre = "Energias Renovables"
                     )
                 )
-                val linia7 = daoLinea?.addLineaTrabajo(
+                daoLinea?.addLineaTrabajo(
                     LineaTrabajo(
                         id = 7,
                         nombre = "Medicina"
@@ -140,7 +144,6 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                 }
 
 
-
                 //Investigadores
                 val daoInvestigador = instance?.investigadoresDao()
                 val investigadores = listOf(
@@ -150,7 +153,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         especialidad = "Visión por Computador",
                         carrera = "Ingeniería en Computación",
                         nivelSNII = "Nivel I",
-                        fechaSNII = "2023-04-10",
+                        fechaSNII = "1/06/2021",
                         areaId = 1
                     ),
                     Investigador(
@@ -159,7 +162,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         especialidad = "Robótica Móvil",
                         carrera = "Ingeniería Mecatrónica",
                         nivelSNII = "Nivel II",
-                        fechaSNII = "2021-08-15",
+                        fechaSNII = "1/06/2021",
                         areaId = 2
                     ),
                     Investigador(
@@ -168,7 +171,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         especialidad = "Sistemas Embebidos",
                         carrera = "Ingeniería Electrónica",
                         nivelSNII = "Candidato",
-                        fechaSNII = "2022-01-20",
+                        fechaSNII = "1/06/2021",
                         areaId = 1
                     ),
                     Investigador(
@@ -177,7 +180,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         especialidad = "Procesamiento de Lenguaje Natural",
                         carrera = "Ciencias de la Computación",
                         nivelSNII = "Nivel III",
-                        fechaSNII = "2019-11-30",
+                        fechaSNII = "1/06/2021",
                         areaId = 1
                     ),
                     Investigador(
@@ -186,7 +189,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         especialidad = "Fuentes de Energía Renovable",
                         carrera = "Ingeniería en Energía",
                         nivelSNII = "Nivel I",
-                        fechaSNII = "2020-05-12",
+                        fechaSNII = "1/06/2021",
                         areaId = 3
                     )
                 )
@@ -198,11 +201,26 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                 // Relación investigador-línea de trabajo
                 val daoInvestigadorLinea = instance?.investigadorLineaTrabajoDao()
                 val relaciones = listOf(
-                    InvestigadorLineaTrabajo(investigadorId = 1, lineaTrabajoId = 1),  // Juan López con Desarrollo de Software
-                    InvestigadorLineaTrabajo(investigadorId = 2, lineaTrabajoId = 2),  // María Rodríguez con Robótica
-                    InvestigadorLineaTrabajo(investigadorId = 3, lineaTrabajoId = 4),  // Carlos Sánchez con Electrónica
-                    InvestigadorLineaTrabajo(investigadorId = 4, lineaTrabajoId = 3),  // Laura Fernández con IA
-                    InvestigadorLineaTrabajo(investigadorId = 5, lineaTrabajoId = 6)   // Andrés Morales con Energías Renovables
+                    InvestigadorLineaTrabajo(
+                        investigadorId = 1,
+                        lineaTrabajoId = 1
+                    ),  // Juan López con Desarrollo de Software
+                    InvestigadorLineaTrabajo(
+                        investigadorId = 2,
+                        lineaTrabajoId = 2
+                    ),  // María Rodríguez con Robótica
+                    InvestigadorLineaTrabajo(
+                        investigadorId = 3,
+                        lineaTrabajoId = 4
+                    ),  // Carlos Sánchez con Electrónica
+                    InvestigadorLineaTrabajo(
+                        investigadorId = 4,
+                        lineaTrabajoId = 3
+                    ),  // Laura Fernández con IA
+                    InvestigadorLineaTrabajo(
+                        investigadorId = 5,
+                        lineaTrabajoId = 6
+                    )   // Andrés Morales con Energías Renovables
                 )
                 relaciones.forEach { relacion ->
                     daoInvestigadorLinea?.addRelacion(relacion)
@@ -217,8 +235,8 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         tipo = "Practicante",
                         carrera = "Ingeniería en Software",
                         escuela = "Universidad XYZ",
-                        fechaInicio = "2022-01-01",
-                        fechaFin = "2022-12-31",
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021",
                         investigadorId = 1
                     ),
                     Estudiante(
@@ -227,8 +245,8 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         tipo = "Serv. Social",
                         carrera = "Licenciatura en Administración",
                         escuela = "Universidad ABC",
-                        fechaInicio = "2021-06-01",
-                        fechaFin = "2022-05-31",
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021",
                         investigadorId = 2
                     ),
                     Estudiante(
@@ -237,8 +255,8 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         tipo = "Maestría",
                         carrera = "Ciencias de la Computación",
                         escuela = "Universidad XYZ",
-                        fechaInicio = "2020-09-01",
-                        fechaFin = "2021-08-31",
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021",
                         investigadorId = 3
                     ),
                     Estudiante(
@@ -247,8 +265,8 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         tipo = "Doctorado",
                         carrera = "Ingeniería Industrial",
                         escuela = "Universidad DEF",
-                        fechaInicio = "2020-07-01",
-                        fechaFin = "2021-06-30",
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021",
                         investigadorId = 4
                     ),
                     Estudiante(
@@ -257,8 +275,8 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         tipo = "Practicante",
                         carrera = "Ingeniería Mecatrónica",
                         escuela = "Universidad XYZ",
-                        fechaInicio = "2022-02-01",
-                        fechaFin = "2022-11-30",
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021",
                         investigadorId = 4
                     )
                 )
@@ -272,26 +290,26 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                     Proyecto(
                         id = 1,
                         nombre = "Desarrollo de Aplicaciones Móviles",
-                        fechaInicio = "2022-01-01",
-                        fechaFin = "2022-12-31"
+                        fechaInicio = "21/06/2021",
+                        fechaFin = "1/06/2021"
                     ),
                     Proyecto(
                         id = 2,
                         nombre = "Investigación de Robótica",
-                        fechaInicio = "2021-06-01",
-                        fechaFin = "2022-05-31"
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "21/06/2021"
                     ),
                     Proyecto(
                         id = 3,
                         nombre = "Diseño de Sistemas Embebidos",
-                        fechaInicio = "2020-09-01",
-                        fechaFin = "2021-08-31"
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021"
                     ),
                     Proyecto(
                         id = 4,
                         nombre = "Desarrollo de Plataformas Web",
-                        fechaInicio = "2020-07-01",
-                        fechaFin = "2021-06-30"
+                        fechaInicio = "1/06/2021",
+                        fechaFin = "1/06/2021"
                     )
                 )
                 proyectos.forEach { proyecto ->
@@ -317,14 +335,14 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                 //Relaciones Proyecto-Herramienta
                 val daoProyectoHerramienta = instance?.proyectoHerramientaDao()
                 val relacionesHerramienta = listOf(
-                    ProyectoHerramienta(proyectoId = 1 , herramientaId = 2),
-                    ProyectoHerramienta(proyectoId = 2 , herramientaId = 2),
-                    ProyectoHerramienta(proyectoId = 3 , herramientaId = 4),
-                    ProyectoHerramienta(proyectoId = 4 , herramientaId = 4),
-                    ProyectoHerramienta(proyectoId = 1 , herramientaId = 3),
-                    ProyectoHerramienta(proyectoId = 2 , herramientaId = 3),
-                    ProyectoHerramienta(proyectoId = 3 , herramientaId = 1),
-                    ProyectoHerramienta(proyectoId = 4 , herramientaId = 1)
+                    ProyectoHerramienta(proyectoId = 1, herramientaId = 2),
+                    ProyectoHerramienta(proyectoId = 2, herramientaId = 2),
+                    ProyectoHerramienta(proyectoId = 3, herramientaId = 4),
+                    ProyectoHerramienta(proyectoId = 4, herramientaId = 4),
+                    ProyectoHerramienta(proyectoId = 1, herramientaId = 3),
+                    ProyectoHerramienta(proyectoId = 2, herramientaId = 3),
+                    ProyectoHerramienta(proyectoId = 3, herramientaId = 1),
+                    ProyectoHerramienta(proyectoId = 4, herramientaId = 1)
                 )
                 relacionesHerramienta.forEach { relacion ->
                     daoProyectoHerramienta?.addRelacion(relacion)
@@ -392,7 +410,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                     ArticuloInvestigador(articuloId = 2, investigadorId = 3, esPrincipal = false),
                     ArticuloInvestigador(articuloId = 3, investigadorId = 4, esPrincipal = false),
                     ArticuloInvestigador(articuloId = 4, investigadorId = 5, esPrincipal = false)
-                    )
+                )
                 relacionesArticulo.forEach { relacion ->
                     daoArticuloInvestigador?.addRelacion(relacion)
                 }
@@ -405,7 +423,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         id = 1,
                         nombre = "Seminario de Robótica",
                         lugar = "Aula 101",
-                        fecha = "2023-05-15",
+                        fecha = "1/06/2021",
                         duracion = "2 horas",
                         empresaInvita = "XYZ Inc.",
                         investigadorId = 1
@@ -414,8 +432,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         id = 2,
                         nombre = "Conferencia de Inteligencia Artificial",
                         lugar = "Sala de Conferencias",
-                        fecha = "2023-06-21"
-                        ,
+                        fecha = "1/06/2021",
                         duracion = "4 horas",
                         empresaInvita = "ABC Corp.",
                         investigadorId = 2
@@ -424,7 +441,7 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                         id = 3,
                         nombre = "Taller de Programación",
                         lugar = "Biblioteca Central",
-                        fecha = "2023-0-8-21",
+                        fecha = "1/06/2021",
                         duracion = "3 horas",
                         empresaInvita = "DEF Inc.",
                         investigadorId = 3
@@ -432,9 +449,8 @@ abstract class InvestigadoresDatabase : RoomDatabase() {
                     Evento(
                         id = 4,
                         nombre = "Conferencia de Seguridad Informática",
-                        lugar = "Oficina de Seguridad"
-                        ,
-                        fecha = "2023-07-10",
+                        lugar = "Oficina de Seguridad",
+                        fecha = "1/06/2021",
                         duracion = "2 horas",
                         empresaInvita = "GHI Corp.",
                         investigadorId = 4

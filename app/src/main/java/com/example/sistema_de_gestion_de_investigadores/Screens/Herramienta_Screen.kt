@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -21,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -288,15 +288,7 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
                                     edit = false
 
 
-
                                 }
-
-
-
-
-
-
-
 
 
                             },
@@ -326,10 +318,12 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
 
             }
 
-            LazyColumn (  verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(horizontal = 16.dp))
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
             {
-                items(allherramientas) {herramienta ->
+                items(allherramientas) { herramienta ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -363,7 +357,7 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp,end = 14.dp),
+                            .padding(top = 12.dp, end = 14.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         IconButton(
@@ -389,10 +383,9 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
                                 herram_by = herramienta
 
 
-
                             },
 
-                        ) {
+                            ) {
                             Icon(
                                 Icons.Default.Edit,
                                 contentDescription = "Editar Investigador",
@@ -403,33 +396,13 @@ fun Body_herramientas(navController: NavHostController, appContainer: App_Contai
                     }
 
 
-
                 }
 
 
             }
 
 
-
-
-
-
-
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         // Botón para añadir un investigador

@@ -15,32 +15,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
-
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -67,7 +66,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.App_Container
 import com.example.sistema_de_gestion_de_investigadores.Data_Base.AreaTrabajo
-import com.example.sistema_de_gestion_de_investigadores.Data_Base.LineaTrabajo
 import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio
 import com.example.sistema_de_gestion_de_investigadores.ui.theme.AreaTrabajoViewModel
 
@@ -160,18 +158,20 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
     var area_er by remember { mutableStateOf<AreaTrabajo?>(null) }
 
     var jefearea by remember { mutableStateOf("") }
-    val lugar = remember {  mutableStateListOf(
-        "Ciudad Guadalajara",
-        "Ciudad Monterrey",
-        "Ciudad de México",
-        "Ciudad Puebla",
-        "Ciudad Querétaro",
-        "Unidad 1",
-        "Unidad 2",
-        "Unidad 3",
-        "Unidad 4",
-        "Unidad 5"
-    )}
+    val lugar = remember {
+        mutableStateListOf(
+            "Ciudad Guadalajara",
+            "Ciudad Monterrey",
+            "Ciudad de México",
+            "Ciudad Puebla",
+            "Ciudad Querétaro",
+            "Unidad 1",
+            "Unidad 2",
+            "Unidad 3",
+            "Unidad 4",
+            "Unidad 5"
+        )
+    }
     var selclugar by remember { mutableStateOf("") }
     //Estados para controlar la base de datos
     val areaTrabajoViewModel = AreaTrabajoViewModel(appContainer.provideAreaTrabajoRepository())
@@ -184,7 +184,7 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
 
         Column(modifier = Modifier.padding(16.dp)) {
 
-            if(ver_form){
+            if (ver_form) {
 
                 Column(
                     modifier = Modifier
@@ -256,16 +256,12 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
                                         jefeArea = jefearea,
                                         lugar = selclugar
                                     )
-
                                     areaTrabajoViewModel.incertAreaTrabajo(areaNew)
                                     ver_form = false
                                     nombre = ""
                                     jefearea = ""
                                     selclugar = ""
-
-
-
-                                }else{
+                                } else {
                                     area_er?.nombre = nombre.toString()
                                     area_er?.jefeArea = jefearea.toString()
                                     area_er?.lugar = selclugar.toString()
@@ -277,55 +273,34 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
                                     nombre = ""
                                     jefearea = ""
                                     selclugar = ""
-
-
                                 }
-
-
                             },
                             modifier = Modifier
                                 .width(200.dp)
                                 .padding(start = 25.dp)
                         ) {
-                            Text(if (edit == false) "Añadir Area lugar" else "Editar Area lugar" )
+                            Text(if (edit == false) "Añadir Area lugar" else "Editar Area lugar")
                         }
                         Spacer(modifier = Modifier.width(5.dp))
                         Button(
                             shape = RectangleShape,
-
                             onClick = {
                                 ver_form = false
                                 edi = ""
-
                                 nombre = ""
                                 jefearea = ""
                                 selclugar = ""
-
-
-
                             }
                         ) {
                             Icon(Icons.Default.Close, contentDescription = "Salir form")
                         }
                     }
-
-
-
-
-
-
                 }
-
-
-
-
             }
-
-
-
-
-            LazyColumn (verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(horizontal = 16.dp))
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
             {
                 items(allAreasTrabajo) { index ->
 
@@ -388,7 +363,7 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp,end = 14.dp),
+                            .padding(top = 12.dp, end = 14.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         IconButton(
@@ -412,10 +387,7 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
                                 selclugar = index.lugar
                                 ver_form = true
                                 area_er = index
-                                edi= index.id.toString()
-
-
-
+                                edi = index.id.toString()
                             },
 
                             ) {
@@ -425,18 +397,9 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
                                 tint = Color.Blue
                             )
                         }
-
                     }
-
-
-
                 }
-
             }
-
-
-
-
         }
         // Botón para añadir un investigador
         FloatingActionButton(
@@ -446,7 +409,6 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
                 nombre = ""
                 jefearea = ""
                 selclugar = ""
-
             },
             containerColor = Color(0xFF00BCD4),
             contentColor = Color.White,
@@ -457,9 +419,6 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
             Icon(Icons.Default.Add, contentDescription = "Añadir Investigador")
         }
     }
-
-
-
 }
 
 
@@ -467,5 +426,8 @@ fun Body_Areas(navController: NavController, appContainer: App_Container) {
 @Composable
 fun Areas_ScreenPreview() {
 
-    Areas_Screen(navController = NavController(LocalContext.current), appContainer = App_Container(LocalContext.current))
+    Areas_Screen(
+        navController = NavController(LocalContext.current),
+        appContainer = App_Container(LocalContext.current)
+    )
 }
