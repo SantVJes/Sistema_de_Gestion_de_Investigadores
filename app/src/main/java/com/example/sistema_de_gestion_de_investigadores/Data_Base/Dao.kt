@@ -230,7 +230,7 @@ eventoDao proporciona acceso a la tabla de eventos en la base de datos
 @Dao
 interface EventosDao{
     @Query("SELECT * FROM Evento")
-    suspend fun getAllEventos(): List<Evento>
+     fun getAllEventos(): Flow<List<Evento>>
     @Query("SELECT * FROM Evento WHERE id = :id")
     suspend fun getEventoById(id: Int): Evento?
     @Query("SELECT * FROM Evento WHERE investigadorId = :investigadorId")

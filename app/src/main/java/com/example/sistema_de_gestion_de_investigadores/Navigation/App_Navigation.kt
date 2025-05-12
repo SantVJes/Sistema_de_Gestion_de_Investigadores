@@ -10,6 +10,7 @@ import com.example.sistema_de_gestion_de_investigadores.Navigation.Directorio.li
 import com.example.sistema_de_gestion_de_investigadores.Screens.Areas_Screen
 import com.example.sistema_de_gestion_de_investigadores.Screens.Articulos_Screen
 import com.example.sistema_de_gestion_de_investigadores.Screens.Estudiantes_Screen
+import com.example.sistema_de_gestion_de_investigadores.Screens.Eventos_Screen
 import com.example.sistema_de_gestion_de_investigadores.Screens.Herramientas_screen
 import com.example.sistema_de_gestion_de_investigadores.Screens.Home_screen
 import com.example.sistema_de_gestion_de_investigadores.Screens.Investigadores_Screen
@@ -50,6 +51,9 @@ fun AppNavigations(appContainer: App_Container) {
         }
         composable(Directorio.estudiantes_screen) {
             Estudiantes_Screen(navController, appContainer)
+        }
+        composable(Directorio.eventos_screen) {
+            Eventos_Screen(navController, appContainer)
         }
 
     }

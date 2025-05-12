@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -114,7 +115,8 @@ fun Body_home(navController: NavController, appContainer: App_Container) {
         Triple("Líneas de trabajo", Directorio.lineas_trabajo, Icons.Default.Info),
         Triple("Artículos", Directorio.articulos_screen, Icons.Default.Email),
         Triple("Áreas de trabajo", Directorio.areas_screen, Icons.Default.Place),
-        Triple("Estudiantes ",Directorio.estudiantes_screen, Icons.Default.AccountCircle)
+        Triple("Estudiantes ",Directorio.estudiantes_screen, Icons.Default.AccountCircle),
+        Triple("Eventos ",Directorio.eventos_screen, Icons.Default.Star)
     )
 
     LazyVerticalGrid(
